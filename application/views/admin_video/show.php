@@ -1,6 +1,6 @@
 <fieldset>
 	<legend><strong>Video detail</strong></legend>
-	<table class="stats a" style="width: 100%;border: 1px #000">
+	<table class="stats" style="width: 100%;border: 1px #000">
 		<tbody>
 			<tr>
 				<td>Title</td>
