@@ -1,0 +1,33 @@
+<div class="nav-alphabet">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12">
+        <ul class="nav-az list-inline">
+          <li><a href="<?php echo makeLink(0, '', 'list_series_all')?>">ALL</a></li>
+          <li><a href="<?php echo makeLink(0, 'Other', 'list_series_by_char')?>">#</a></li>
+          <?php
+          $alphas = range('A', 'Z');
+          foreach($alphas as $alpha):
+          ?>
+          <li><a href="<?php echo makeLink(0, $alpha, 'list_series_by_char')?>"><?php echo $alpha?></a></li>
+          <?php endforeach;?>
+        </ul>
+      </div><!-- /.col-sm-12 -->
+    </div><!-- /.row -->
+  </div><!-- /.container -->
+</div>
+
+<header>
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-3">
+        <h1 class="logo"><a href="/"><img src="<?php echo $theme_path ?>images/logo.png" alt="Solid Tube"></a></h1>
+      </div><!-- /.col-sm-3 -->
+      <div class="col-sm-9">
+        <div class="top-banner-728x90 center-block">
+          <a href="#"><img src="https://unsplash.it/728/90?random" alt="video title" class="img-responsive"></a>
+        </div><!-- /.top-banner-728x90 -->
+      </div><!-- /.col-sm-9 -->
+    </div><!-- /.row -->
+  </div><!-- /.container -->
+</header>
