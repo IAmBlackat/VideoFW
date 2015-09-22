@@ -56,7 +56,7 @@ class Series extends MY_Controller {
       $this->layout->setMeta($metaData);
       $this->layout->view('series/' . $page, $data);
     } else {
-      $this->layout->view('home/error', array());
+      $this->layout->view('home/nodata', array());
     }
   }
   public function list_series_by_firstchar($page = "list_series_by_firstchar") {
@@ -78,7 +78,7 @@ class Series extends MY_Controller {
       $this->layout->setMeta($metaData);
       $this->layout->view('series/' . $page, $data);
     } else {
-      $this->layout->view('home/error', array());
+      $this->layout->view('home/nodata', array());
     }
   }
   public function series_detail($page = "series_detail") {
@@ -106,7 +106,7 @@ class Series extends MY_Controller {
       $this->layout->setMeta($metaData);
       $this->layout->view('series/' . $page, $data);
     } else {
-      $this->layout->view('home/error', array());
+      $this->layout->view('home/nodata', array());
     }
   }
 

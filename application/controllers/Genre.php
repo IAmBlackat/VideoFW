@@ -37,7 +37,7 @@ class Genre extends MY_Controller {
       $this->layout->title("Series of genre ".$genre['name']);
       $this->layout->view('genre/' . $page, $data);
     } else {
-      $this->layout->view('home/error', array());
+      $this->layout->view('home/nodata', array());
     }
   }
 

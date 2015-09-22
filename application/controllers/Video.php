@@ -42,7 +42,7 @@ class Video extends MY_Controller {
       $this->layout->setMeta($metaData);
       $this->layout->view('video/' . $page, $data);
     } else {
-      $this->layout->view('home/error', array());
+      $this->layout->view('home/nodata', array());
     }
   }
 }

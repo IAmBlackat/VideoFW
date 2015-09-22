@@ -83,20 +83,16 @@ class ImportDramaCool {
       $dbSeries = $this->Series_model->getByTitle($seriesTitle);
       if ($dbSeries) {
         $seriesId = $dbSeries['id'];
-        //update lai thumbnail
-        $isExistThumbnail = file_exists(SERIE_IMAGE_THUMBNAIL_PATH.$dbSeries['thumbnail']);
-        if(!$isExistThumbnail || empty($dbSeries['is_complete'])){
-          $updateSeriesData = array();
+        $updateSeriesData = array();
+        $updateSeriesData['type'] = $type;
+        if(empty($dbSeries['is_complete'])){
           $tmpSeriesData = $this->getSeriesData($seriesLink);
-          if(!$isExistThumbnail){
-            $seriesThumbnail = saveImageFromSite($tmpSeriesData['thumbnail'], SERIE_IMAGE_THUMBNAIL_PATH);
-            $updateSeriesData['thumbnail'] = $seriesThumbnail;
-          }
           if(empty($dbSeries['is_complete'])){
             $updateSeriesData['is_complete'] = $tmpSeriesData['is_complete'];
+
           }
-          $this->Series_model->update($seriesId, $updateSeriesData);
         }
+        $this->Series_model->update($seriesId, $updateSeriesData);
         //
       } else {
         $seriesData = $this->getSeriesData($seriesLink);
@@ -114,6 +110,7 @@ class ImportDramaCool {
           }
         }
       }
+
       //end series
       //video
       $videoData['series_id'] = $seriesId;
