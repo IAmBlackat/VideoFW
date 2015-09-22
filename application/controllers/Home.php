@@ -40,15 +40,15 @@ class Home extends MY_Controller {
     
     
     $dramaList = $this->Series_model->getRangeFull('series.status='.STATUS_SHOW. ' AND series.type='.VIDEO_TYPE_DRAMA, 0, 12, 'video.publish_date DESC');
-    $viewData = array('datas' => $dramaList, 'title' => 'Recent Added Drama', 'link' => '#');
+    $viewData = array('datas' => $dramaList, 'title' => 'Recent Added Drama', 'link' => base_url().'drama-list.html');
     $data['block_drama'] = $this->load->view("home/_block_item", $viewData, true);
     
     $dramaList = $this->Series_model->getRangeFull('series.status='.STATUS_SHOW. ' AND series.type='.VIDEO_TYPE_SHOW, 0, 12, 'video.publish_date DESC');
-    $viewData = array('datas' => $dramaList, 'title' => 'Recent Added Show', 'link' => '#');
+    $viewData = array('datas' => $dramaList, 'title' => 'Recent Added Show', 'link' => base_url().'show-list.html');
     $data['block_show'] = $this->load->view("home/_block_item", $viewData, true);
     
     $dramaList = $this->Series_model->getRangeFull('series.status='.STATUS_SHOW. ' AND series.type='.VIDEO_TYPE_MOVIE, 0, 12, 'video.publish_date DESC');
-    $viewData = array('datas' => $dramaList, 'title' => 'Recent Added Movie', 'link' => '#');
+    $viewData = array('datas' => $dramaList, 'title' => 'Recent Added Movie', 'link' => base_url().'movies-list.html');
     $data['block_movie'] = $this->load->view("home/_block_item", $viewData, true);
     
     //echo "<pre>"; print_r($newestVideo); die();

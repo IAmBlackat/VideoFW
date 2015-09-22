@@ -98,12 +98,44 @@ class Series extends MY_Controller {
     $data['max'] = ITEM_PER_PAGE_8;
     $data['offset'] = $offset;
     $data['newestVideo'] = isset($newestVideoOfSeries[0]) ? $newestVideoOfSeries[0]: array();
+    $this->layout->title("Series ".$series['title']);
+    $metaData['page_link'] = rtrim(base_url(), '/'). $_SERVER['REDIRECT_URL'];
+    $this->layout->setMeta($metaData);
     if ($videosOfSeries) {
       $data['series'] = $series;
       $data['videosOfSeries'] = $videosOfSeries;
-      $this->layout->title("Series ".$series['title']);
-      $metaData['page_link'] = rtrim(base_url(), '/'). $_SERVER['REDIRECT_URL'];
-      $this->layout->setMeta($metaData);
+      $this->layout->view('series/' . $page, $data);
+    } else {
+      $this->layout->view('home/nodata', array());
+    }
+  }
+  public function list_series_by_type($page = "list_series_by_type") {
+    $pageNum = isset($_GET['p']) ? intval($_GET['p']) : 1;
+    $uri = strtolower($this->uri->segment(1));
+    $type = VIDEO_TYPE_DRAMA;
+    $title = "Drama";
+    if($uri == 'movies-list.html'){
+      $type = VIDEO_TYPE_MOVIE;
+      $title = "Movies";
+    }elseif($uri == 'show-list.html'){
+      $type = VIDEO_TYPE_SHOW;
+      $title = "Show";
+    }
+    $whereClause = " type = {$type}";
+
+    $total = $this->Series_model->getTotal($whereClause);
+    $offset = ($pageNum - 1) * ITEM_PER_PAGE_32;
+    $listObject = $this->Series_model->getRange($whereClause, $offset, ITEM_PER_PAGE_32);
+    $data['total'] = $total;
+    $data['max'] = ITEM_PER_PAGE_32;
+    $data['offset'] = $offset;
+    $title = "List all ".$title;
+    $data['title'] = $title;
+    $this->layout->title($title);
+    $metaData['page_link'] = rtrim(base_url(), '/'). $_SERVER['REDIRECT_URL'];
+    $this->layout->setMeta($metaData);
+    if ($listObject) {
+      $data['listObject'] = $listObject;
       $this->layout->view('series/' . $page, $data);
     } else {
       $this->layout->view('home/nodata', array());

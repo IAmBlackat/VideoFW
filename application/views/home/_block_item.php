@@ -1,5 +1,5 @@
 <div class="ui-section-title">
-  <h3><a href="<?php echo $link?>"><?php echo $title?></a></h3> <a href="#" class="view-more">View all</a>
+  <h3><a href="<?php echo $link?>"><?php echo $title?></a></h3> <a href="<?php echo $link?>" class="view-more">View all</a>
 </div><!-- /.ui-section-title -->
 <?php
 if ($datas):

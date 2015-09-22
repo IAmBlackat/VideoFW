@@ -66,3 +66,7 @@ $route['chinese-drama/(:any)'] = "series/series_detail/series_detail";
 $route['other-drama/(:any)'] = "series/series_detail/series_detail";
 
 $route['genre/(:any)'] = "genre/detail/detail";
+
+$route['drama-list.html'] = "series/list_series_by_type/list_series_by_type";
+$route['show-list.html'] = "series/list_series_by_type/list_series_by_type";
+$route['movies-list.html'] = "series/list_series_by_type/list_series_by_type";
