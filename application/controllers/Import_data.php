@@ -55,7 +55,10 @@ class Import_Data extends MY_Controller {
   #/Applications/XAMPP/xamppfiles/bin/php-5.5.15 /Datas/Sources/VideoFW/index.php import_data console_update_video_streaming 
   public function console_update_video_streaming(){
     echo "console_update_video_streaming:\n";
-    $whereClause = " import_status IS NULL OR import_status=0";
+    $time1 = time();
+    $currentUpdateVideoId = $this->Config_model->getValue('current_update_streaming_video_id');
+    $currentUpdateVideoId = intval($currentUpdateVideoId);
+    $whereClause = " id>{$currentUpdateVideoId} AND (import_status IS NULL OR import_status=0)";
     $videoList = $this->Video_model->getRange($whereClause, 0, 10000, 'id ASC');
     if($videoList){
       foreach($videoList as $video){
@@ -65,10 +68,13 @@ class Import_Data extends MY_Controller {
         $dataStatus = array();
         $dataStatus['import_status'] = 1;
         $this->Video_model->update($video['id'], $dataStatus);
+        $this->Config_model->setValue('current_update_streaming_video_id', $video['id']);
       }
     }else{
       $this->Config_model->setValue('update_streaming_status', 1);//done
     }
+    $time2 = time();
+    echo "console_update_video_streaming: ".($time2 - $time1)."\n";
     die("exit");
   }
   #/Applications/XAMPP/xamppfiles/bin/php-5.5.15 /Datas/Sources/VideoFW/index.php import_data console 
@@ -79,7 +85,8 @@ class Import_Data extends MY_Controller {
     $this->_importDrama();
     $this->_importShow();
     $this->_importMovies();
-    echo "\nTotal time : ".time()-$time1; echo "s\n";
+    $time2 = time();
+    echo "\nTotal time : ".($time2-$time1); echo "s\n";
     die("exit console");
   }
   private function _importDrama(){
@@ -94,7 +101,8 @@ class Import_Data extends MY_Controller {
     foreach($dramaUrls as $dramaUrl){
       $this->dramaCool->importFromCountryUrl($dramaUrl, array('type'=>VIDEO_TYPE_DRAMA));
     }
-    echo "\nTotal time _importDrama : ".time()-$time1; echo "s\n";
+    $time2 = time();
+    echo "\nTotal time _importDrama : ".($time2-$time1); echo "s\n";
   }
   private function _importShow(){
     $time1 = time();
@@ -116,7 +124,8 @@ class Import_Data extends MY_Controller {
     foreach($urls as $url){
       $this->dramaCool->importFromCountryUrl($url, array('type'=>VIDEO_TYPE_SHOW));
     }
-    echo "\nTotal time _importShow : ".time()-$time1; echo "s\n";
+    $time2 = time();
+    echo "\nTotal time _importShow : ".($time2-$time1); echo "s\n";
   }
   
   private function _importMovies(){
@@ -131,7 +140,8 @@ class Import_Data extends MY_Controller {
     foreach($urls as $url){
       $this->dramaCool->importFromCountryUrl($url, array('type'=>VIDEO_TYPE_MOVIE));
     }
-    echo "\nTotal time _importMovies : ".time()-$time1; echo "s\n";
+    $time2 = time();
+    echo "\nTotal time _importMovies : ".($time2-$time1); echo "s\n";
   }
 	public function save(){
 		$data = $_POST;
