@@ -55,7 +55,7 @@ class Layout {
     // Render template
     $data['theme_path'] = $this->getSkin();
     $data['content_for_layout'] = $this->obj->load->view($view, $data, true);
-    $data['title_for_layout'] = !empty($this->title) ? $this->title : DEFAULT_TITLE;
+    $data['title_for_layout'] = !empty($this->title) ? DEFAULT_TITLE .' - '.$this->title : DEFAULT_TITLE;
     $data['description_for_layout'] = isset($this->metaData['description']) ? $this->metaData['description'] : DEFAULT_DESCRIPTION;
     $data['keyword_for_layout'] = isset($this->metaData['keyword_for_layout']) ? $this->metaData['keyword_for_layout'] : DEFAULT_KEYWORD;
 
