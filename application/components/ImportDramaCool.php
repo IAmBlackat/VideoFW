@@ -142,12 +142,7 @@ class ImportDramaCool {
         $streamingUrl = $this->getVideoSourceFromIframe($iframePlayerLink, 'cool');
       } elseif ($videoData['mp4Iframe']) {
         $iframePlayerLink = $videoData['mp4Iframe'];
-        if(isset($videoData['mp4Streaming']) && $videoData['mp4Streaming']){
-          $streamingUrl = $videoData['mp4Streaming'];
-        }else{
-          $streamingUrl = $this->getVideoSourceFromIframe($iframePlayerLink, 'mp4');
-        }
-        
+        $streamingUrl = $this->getVideoSourceFromIframe($iframePlayerLink, 'mp4');
       }
       if ($streamingUrl) {
         $videoUrlData = array();
@@ -168,7 +163,6 @@ class ImportDramaCool {
       echo "updateStreaming: ".$videoId. ": " . $url . "\n";
     }
     $videoData = $this->getVideoData($url);
-
     $this->Video_Url_model->deleteByVideoId($videoId);
     //hd 720
     if ($videoData['hdIframe']) {//get
@@ -190,12 +184,7 @@ class ImportDramaCool {
       $streamingUrl = $this->getVideoSourceFromIframe($iframePlayerLink, 'cool');
     } elseif ($videoData['mp4Iframe']) {
       $iframePlayerLink = $videoData['mp4Iframe'];
-      if(isset($videoData['mp4Streaming']) && $videoData['mp4Streaming']){
-        $streamingUrl = $videoData['mp4Streaming'];
-      }else{
-        $streamingUrl = $this->getVideoSourceFromIframe($iframePlayerLink, 'mp4');
-      }
-
+      $streamingUrl = $this->getVideoSourceFromIframe($iframePlayerLink, 'mp4');
     }
     if ($streamingUrl) {
       $videoUrlData = array();
@@ -279,18 +268,14 @@ class ImportDramaCool {
       }
       preg_match_all('#<script(.*?)</script>#is', $contentUrl, $matches);
       $iframeScript = $matches[0][9];
-      $isMp4Upload = strpos($iframeScript, 'mp4upload');
-      $isDramaUpload = strpos($iframeScript, 'dramaupload');
-      if ($isMp4Upload || $isDramaUpload) {
-        $mp4IframeString = getStringBetween($iframeScript, "<iframe", "</iframe>");
-        $mp4IframeObj = str_get_html($mp4IframeString);
+      $mp4IframeString = getStringBetween($iframeScript, "<iframe", "</iframe>");
+      $mp4IframeObj = str_get_html($mp4IframeString);
+      if($mp4IframeObj){
         $playerLink = $mp4IframeObj->find('iframe', 0)->src;
         $videoData['mp4Iframe'] = $playerLink;
-        if($isDramaUpload){
-          $videoData['mp4Streaming'] = $playerLink;
-        }
-        
       }
+
+
     }
     return $videoData;
   }
@@ -313,6 +298,9 @@ class ImportDramaCool {
         break;
       case 'mp4':
         $strSources = getStringBetween($playerSource, "'file': '", "',", false);
+        if(empty($strSources)){
+          $strSources = getStringBetween($playerSource, "file: '", "',", false);
+        }
         break;
       default:
         break;

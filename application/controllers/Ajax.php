@@ -80,7 +80,11 @@ class ajax extends MY_Controller {
         $r = $dramaCool->updateStreaming($videoObj['id'], $videoObj['original_url'], false);
         if($r){
           $strReturn = 'updated';
+        }else{
+          $strReturn = 'cannot update';
         }
+      }else{
+        $strReturn = 'file not found';
       }
     }else{
       $strReturn = 'playing';

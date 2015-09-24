@@ -18,8 +18,9 @@
               <source src="<?php echo $streamingUrl?>" type="video/mp4">
             </video>
           <?php else:?>
-            Comming soon
+            Video will update as soon as possible. Thank you!
           <?php endif;?>
+          <div id="_updating_streaming_msg" class="hidden">Try Loading video ...</div>
 
 
         </div><!-- /.player -->
@@ -27,5 +28,4 @@
     </div><!-- /.row -->
   </div><!-- /.container -->
 </div>
-
 <div id="logs_view" element_id="<?php echo $video_id?>" data-type="video"></div>
