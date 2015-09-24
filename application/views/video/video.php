@@ -1,4 +1,4 @@
-<?php $this->load->view('video/_video_player', array('data'=> $video['video_url'])); ?>
+<?php $this->load->view('video/_video_player', array('data'=> $video['video_url'], 'video_id' => $video['id'])); ?>
 
 <div class="container">
   <div class="row">

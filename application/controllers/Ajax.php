@@ -64,14 +64,31 @@ class ajax extends MY_Controller {
   }
 
   public function logs() {
+    $strReturn = '';
     $logsModel = null;
     $this->load->model('Logs_model', NULL, TRUE);
     $logsModel = new Logs_model();
-    $video_id = isset($_POST['video_id']) ? intval($_POST['video_id']) : 0;
-    if ($video_id) {
-      $logsModel->writeLogs($video_id);
-      echo "done";
+    $elementId = isset($_POST['element_id']) ? intval($_POST['element_id']) : 0;
+    $type = isset($_POST['type']) ? intval($_POST['type']) : 'video';
+    $status = isset($_POST['status']) ? intval($_POST['status']) : 0;
+    if($status==0){
+      $this->load->library('simple_html_dom');
+      $this->load->file(APPPATH.'components/ImportDramaCool.php');
+      $dramaCool = new ImportDramaCool();
+      $videoObj = $this->Video_model->getById($elementId);
+      if($videoObj){
+        $r = $dramaCool->updateStreaming($videoObj['id'], $videoObj['original_url'], false);
+        if($r){
+          $strReturn = 'updated';
+        }
+      }
+    }else{
+      $strReturn = 'playing';
     }
+    if ($elementId) {
+      $logsModel->writeLogs($elementId, $type);
+    }
+    echo $strReturn;
   }
 
   public function load_sidebar() {

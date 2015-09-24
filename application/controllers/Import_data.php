@@ -56,19 +56,15 @@ class Import_Data extends MY_Controller {
   public function console_update_video_streaming(){
     echo "console_update_video_streaming:\n";
     $time1 = time();
-    $currentUpdateVideoId = $this->Config_model->getValue('current_update_streaming_video_id');
-    $currentUpdateVideoId = intval($currentUpdateVideoId);
-    $whereClause = " id>{$currentUpdateVideoId} AND (import_status IS NULL OR import_status=0)";
-    $videoList = $this->Video_model->getRange($whereClause, 0, 10000, 'id ASC');
+    $whereClause = " import_status IS NULL OR import_status=0";
+    $videoList = $this->Video_model->getRange($whereClause, 0, 1, 'id ASC');
     if($videoList){
       foreach($videoList as $video){
         $originalUrl = $video['original_url'];
-        //echo $originalUrl."\n";
-        $this->dramaCool->importFromVideoUrl($originalUrl);
+        $this->dramaCool->updateStreaming($video['id'], $originalUrl);
         $dataStatus = array();
         $dataStatus['import_status'] = 1;
-        $this->Video_model->update($video['id'], $dataStatus);
-        $this->Config_model->setValue('current_update_streaming_video_id', $video['id']);
+        //$this->Video_model->update($video['id'], $dataStatus);
       }
     }else{
       $this->Config_model->setValue('update_streaming_status', 1);//done
