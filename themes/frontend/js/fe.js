@@ -24,12 +24,12 @@ var Video = {
         var cookieName = "_refresh_"+elementId;
         var cookieValue = $.cookie(cookieName);
         videoPlayer.on('error', function() {
-          if(cookieValue==null || cookieValue == 'no'){
+          if(cookieValue==null){
             $('#_updating_streaming_msg').removeClass("hidden");
           }
           $.post(BASE_URL+"ajax/logs",{element_id: elementId, type: type, status: 0}, function( data ) {
             if(data == 'updated'){
-              if(cookieValue==null || cookieValue == 'no'){
+              if(cookieValue==null){
                 $.cookie(cookieName, "yes", { expires: 1, path: '/' } );
                 var currentLocation = window.location;
                 window.location = currentLocation;
@@ -40,7 +40,7 @@ var Video = {
         });
         videoPlayer.on('play', function() {
           $('#_updating_streaming_msg').addClass("hidden");
-          $.cookie(cookieName, "no", { expires: 1, path: '/' } );
+          $.removeCookie(cookieName, { path: '/' });
           $.post(BASE_URL+"ajax/logs",{element_id: elementId, type: type, status: 1}, function( data ) {
           });
         });

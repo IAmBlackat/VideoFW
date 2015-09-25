@@ -88,9 +88,9 @@ class ajax extends MY_Controller {
       }
     }else{
       $strReturn = 'playing';
-    }
-    if ($elementId) {
-      $logsModel->writeLogs($elementId, $type);
+      if ($elementId) {
+        $logsModel->writeLogs($elementId, $type);
+      }
     }
     echo $strReturn;
   }
