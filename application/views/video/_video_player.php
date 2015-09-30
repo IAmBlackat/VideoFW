@@ -1,6 +1,8 @@
 <link href="<?php echo $theme_path ?>css/video-js.css" rel="stylesheet">
 <script src="<?php echo $theme_path ?>js/video-js.js"></script>
 <script src="<?php echo $theme_path ?>js/jquery.cookie.js"></script>
+<link href="<?php echo $theme_path ?>css/video-quality-selector.css" rel="stylesheet" type="text/css" />
+<script src="<?php echo $theme_path ?>js/video-quality-selector.js"></script>
 <script>
   videojs.options.flash.swf = "<?php echo $theme_path?>/swf/video-js.swf";
 </script>
@@ -15,7 +17,7 @@
             $streamingUrl = base64_decode($tmpStreamingUrlArr['streaming_url']);
           ?>
             <video id="_videojs" class="video-js vjs-default-skin" controls="" autoplay preload="" width="854" height="520" data-setup="{}">
-              <source src="<?php echo $streamingUrl?>" type="video/mp4">
+              <source src="<?php echo $streamingUrl?>" type="video/mp4" data-res="360">
             </video>
           <?php else:?>
             Video will update as soon as possible. Thank you!
