@@ -14,7 +14,7 @@
             $tmpStreamingUrlArr = array_pop($data);
             $streamingUrl = base64_decode($tmpStreamingUrlArr['streaming_url']);
           ?>
-            <video id="_videojs" class="video-js vjs-default-skin" controls="" preload="true" width="640" height="264" data-setup="{}">
+            <video id="_videojs" class="video-js vjs-default-skin" controls="" autoplay preload="" width="854" height="520" data-setup="{}">
               <source src="<?php echo $streamingUrl?>" type="video/mp4">
             </video>
           <?php else:?>
