@@ -91,9 +91,9 @@ class ImportDramaCool {
             $updateSeriesData['is_complete'] = $tmpSeriesData['is_complete'];
 
           }
+          $this->Series_model->update($seriesId, $updateSeriesData);
         }
-        $this->Series_model->update($seriesId, $updateSeriesData);
-        //
+
       } else {
         $seriesData = $this->getSeriesData($seriesLink);
         $seriesThumbnail = saveImageFromSite($seriesData['thumbnail'], SERIE_IMAGE_THUMBNAIL_PATH);
@@ -267,7 +267,7 @@ class ImportDramaCool {
         $videoData['coolIframe'] = $playerLink;
       }
       preg_match_all('#<script(.*?)</script>#is', $contentUrl, $matches);
-      $iframeScript = $matches[0][9];
+      $iframeScript = $matches[0][11];
       $mp4IframeString = getStringBetween($iframeScript, "<iframe", "</iframe>");
       $mp4IframeObj = str_get_html($mp4IframeString);
       if($mp4IframeObj){
@@ -297,10 +297,9 @@ class ImportDramaCool {
         $strSources = $htmlAll->find('source', 0)->src;
         break;
       case 'mp4':
-        $strSources = getStringBetween($playerSource, "'file': '", "',", false);
-        if(empty($strSources)){
-          $strSources = getStringBetween($playerSource, "file: '", "',", false);
-        }
+        $strSources = getStringBetween($playerSource, "clip:", "?start=0", false);
+        $strSources = preg_replace('/\s+/', '', $strSources);
+        $strSources = str_replace("{url:'", '', $strSources);
         break;
       default:
         break;

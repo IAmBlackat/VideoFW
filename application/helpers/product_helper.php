@@ -447,7 +447,7 @@ function getFileContent($url, $option = array()) {
     curl_setopt($ch, CURLOPT_URL, $url);
     curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
     //curl_setopt($ch, CURLOPT_PROXY, "proxy.tma.com.vn:8080");
-    //curl_setopt($ch, CURLOPT_PROXY, "117.74.121.147");
+    //curl_setopt($ch, CURLOPT_PROXY, "111.11.255.11");
     //curl_setopt($ch, CURLOPT_PROXYPORT, "80");
 
     curl_setopt($ch, CURLOPT_HEADER, 0);
