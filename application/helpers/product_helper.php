@@ -520,7 +520,7 @@ function getVideoDescription($videoInfo) {
       $string .= ' Raw is released';
     }
   }
-  return $string;
+  return $string. '. '.EXTRA_DESCRIPTION;
 }
 
 function getIdFromUri($uri) {

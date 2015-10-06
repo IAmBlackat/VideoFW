@@ -3,9 +3,6 @@
   <div class="row">
     <?php $this->load->view('templates/sidebar'); ?>
     <div class="col-sm-9 wrap-content">
-      <div class="ui-section-title">
-        <h3><a href="#">Trend Video</a></h3>
-      </div><!-- /.ui-section-title -->
       <?php if ($newestVideo): ?>
         <div class="section-line">
           <div class="row pm-row">
