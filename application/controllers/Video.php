@@ -26,6 +26,7 @@ class Video extends MY_Controller {
     $data = array();
     if ($video) {
       $data['video'] = $video;
+      $data['server_type'] = $this->_config['server_type'];
       $seriesId = $video['series_id'];
       $series = $this->Series_model->getByIdFull($seriesId);
       $videosOfSeries = $this->Video_model->getRange("series_id=" . $seriesId, 0 , 0 , 'episode DESC');
@@ -44,5 +45,11 @@ class Video extends MY_Controller {
     } else {
       $this->layout->view('home/nodata', array());
     }
+  }
+  public function embed(){
+    $base64StreamingUrl = $this->uri->segment(2);
+    $theme_path = base_url().'themes/frontend/';
+    $data = $this->load->view('video/_video_player_embed', array('data'=> $base64StreamingUrl, 'theme_path' => $theme_path), TRUE);
+    echo $data; die();
   }
 }

@@ -529,3 +529,12 @@ $config['status'] = array(
 		STATUS_SHOW	=> 'Show',
 		STATUS_WAIT_FOR_APPROVE	=> 'Wait4Approve',
 );
+
+$config['server_type'] = array(
+  SERVER_TYPE_COOL		=> array('type' => SERVER_TYPE_COOL, 'name' => 'Server 1', 'alias' => '_server_f'),//iframe
+  SERVER_TYPE_MP4		=> array('type' => SERVER_TYPE_MP4, 'name' => 'Server 2', 'alias' => '_server_f'),//iframe
+  SERVER_TYPE_SERVER1		=> array('type' => SERVER_TYPE_SERVER1, 'name' => 'Server 3', 'alias' => '_server_f'),//iframe
+  SERVER_TYPE_STANDARD		=> array('type' => SERVER_TYPE_STANDARD, 'name' => 'Server Standard', 'alias' => '_server_gg'),
+  SERVER_TYPE_HD		=> array('type' => SERVER_TYPE_HD, 'name' => 'Server HD', 'alias' => '_server_gg'),
+);
+

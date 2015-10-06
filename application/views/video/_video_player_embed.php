@@ -1,3 +1,9 @@
+<script src="<?php echo $theme_path ?>js/jquery-2.1.3.js"></script>
+<script src="<?php echo $theme_path ?>js/bootstrap.js"></script>
+<script src="<?php echo $theme_path ?>js/slick.min.js"></script>
+<script src="<?php echo $theme_path ?>js/fe.js"></script>
+<link href="<?php echo $theme_path ?>css/style.css" rel="stylesheet">
+
 <link href="<?php echo $theme_path ?>css/video-js.css" rel="stylesheet">
 <script src="<?php echo $theme_path ?>js/video-js.js"></script>
 <script src="<?php echo $theme_path ?>js/jquery.cookie.js"></script>
@@ -13,8 +19,7 @@
         <div class="player">
           <?php
           if($data):
-            $tmpStreamingUrlArr = array_pop($data);
-            $streamingUrl = base64_decode($tmpStreamingUrlArr['streaming_url']);
+            $streamingUrl = base64_decode($data);
           ?>
             <video id="_videojs" class="video-js vjs-default-skin" controls="" autoplay preload="" width="854" height="520" data-setup="{}">
               <source src="<?php echo $streamingUrl?>" type="video/mp4" data-res="360">

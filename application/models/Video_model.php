@@ -107,7 +107,7 @@ class Video_model extends CI_Model {
   function getByIdFull($id) {
     $data = array();
     try {
-      $sql = "SELECT v.*, vu.id as vuid, vu.streaming_url, vu.type, vu.is_part ".
+      $sql = "SELECT v.*, vu.id as vuid, vu.streaming_url, vu.type, vu.is_part, vu.iframe_url, vu.server_type ".
         " FROM " . self::TABLE_NAME . ' AS v '. 
         " LEFT JOIN video_url AS vu ON v.id=vu.video_id".
         " WHERE v." . self::TABLE_KEY . " = ?";
@@ -121,6 +121,8 @@ class Video_model extends CI_Model {
               'id' => $d['vuid'],
               'streaming_url' => $d['streaming_url'],
               'type' => $d['type'],
+              'server_type' => $d['server_type'],
+              'iframe_url' => $d['iframe_url'],
               'is_part' => $d['is_part']
               );
           }

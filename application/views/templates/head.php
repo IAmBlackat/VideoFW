@@ -40,7 +40,7 @@
   ================================================== -->
 
   <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script src="<?php echo $theme_path ?>js/jquery-1.9.1.min.js"></script>
   <!-- Include all compiled plugins (below), or include individual files as needed -->
   <script src="<?php echo $theme_path ?>js/bootstrap.js"></script>
   <script type="text/javascript" src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>

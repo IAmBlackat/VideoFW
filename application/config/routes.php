@@ -70,3 +70,5 @@ $route['genre/(:any)'] = "genre/detail/detail";
 $route['drama-list.html'] = "series/list_series_by_type/list_series_by_type";
 $route['show-list.html'] = "series/list_series_by_type/list_series_by_type";
 $route['movies-list.html'] = "series/list_series_by_type/list_series_by_type";
+
+$route['embed/(:any)'] = "video/embed";

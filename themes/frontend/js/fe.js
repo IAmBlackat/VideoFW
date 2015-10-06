@@ -11,9 +11,16 @@ jQuery(document).ready(function () {
   }
 
   Video.logVideo();
+  Video.selectServer();
 
 });
 var Video = {
+  selectServer:function(){
+    $('._select_server').click(function(){
+      var iframeUrl = $(this).attr('data-iframe');
+      $('#_video_player').html('<iframe allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true" marginheight="0" marginwidth="0" scrolling="no" frameborder="0" width="727" height="450" src='+iframeUrl+' target="_blank"></iframe>');
+    });
+  },
   logVideo:function(){
     if($('#logs_view').size()){
       var element = $('#logs_view');
