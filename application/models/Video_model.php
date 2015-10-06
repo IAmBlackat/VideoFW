@@ -116,16 +116,14 @@ class Video_model extends CI_Model {
       if ($datas) {
         $videoUrl = array();
         foreach($datas as $d){
-          if($d['streaming_url']){
-            $videoUrl[$d['vuid']] = array(
-              'id' => $d['vuid'],
-              'streaming_url' => $d['streaming_url'],
-              'type' => $d['type'],
-              'server_type' => $d['server_type'],
-              'iframe_url' => $d['iframe_url'],
-              'is_part' => $d['is_part']
-              );
-          }
+          $videoUrl[$d['vuid']] = array(
+            'id' => $d['vuid'],
+            'streaming_url' => $d['streaming_url'],
+            'type' => $d['type'],
+            'server_type' => $d['server_type'],
+            'iframe_url' => $d['iframe_url'],
+            'is_part' => $d['is_part']
+            );
         }
         $data = $datas[0];
         $data['video_url'] = $videoUrl;
