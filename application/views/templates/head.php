@@ -4,6 +4,7 @@
   </script>
 
   <title><?php echo $title_for_layout ?></title>
+  <link rel="icon" type="image/png" href="<?php echo base_url().'uploads/favicon.png'?>">
   <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="<?php echo strip_quotes($description_for_layout) ?>" />

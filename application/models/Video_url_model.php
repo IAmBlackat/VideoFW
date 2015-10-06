@@ -13,6 +13,8 @@ class Video_Url_model extends CI_Model {
     'video_id',
     'streaming_url',
     'type',
+    'server_type',
+    'iframe_url',
     'is_part',
   );
 

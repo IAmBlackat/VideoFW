@@ -67,7 +67,7 @@ class Layout {
     }
     $data['url_for_layout'] = $urlForLayout;
 
-    $data['image_for_layout'] = isset($this->metaData['image']) ? $this->metaData['image'] : base_url() . UPLOAD_PATH . 'image.png';;
+    $data['image_for_layout'] = isset($this->metaData['image']) ? $this->metaData['image'] : base_url() . UPLOAD_PATH . 'image.jpg';;
     // Render resources
     $data['js_for_layout'] = '';
     foreach ($this->js_list as $v)
