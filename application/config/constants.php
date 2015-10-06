@@ -113,6 +113,7 @@ define("SERVER_TYPE_COOL",		1);
 define("SERVER_TYPE_STANDARD", 2);
 define("SERVER_TYPE_MP4", 3);
 define("SERVER_TYPE_HD", 4);
+define("SERVER_TYPE_SERVER1", 5);
 
 define("COUNTRY_KOREA",		1);
 define("COUNTRY_JAPAN",		2);

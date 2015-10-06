@@ -34,40 +34,28 @@ class Import_Data extends MY_Controller {
   #/Applications/XAMPP/xamppfiles/bin/php-5.5.15 /Datas/Sources/VideoFW/index.php import_data console_update_new_data 
   public function console_update_new_data(){
     
-    $dramaLink = "http://www.dramacool.com/recently-added";
-    $movieLink = "http://www.dramacool.com/recently-added-movie";
-    $kshowLink = "http://www.dramacool.com/recently-added-kshow";
+    $dramaLink = "http://www.dramacool.com/drama/recent/page/";
+    $movieLink = "http://www.dramacool.com/drama/recentmovie/page/";
+    $kshowLink = "http://www.dramacool.com/drama/recentkshow/page/";
     echo "console_update_new_data:\n";
-    $this->dramaCool->importHomePage($dramaLink, array('type'=>VIDEO_TYPE_DRAMA));
-    $this->dramaCool->importHomePage($movieLink, array('type'=>VIDEO_TYPE_MOVIE));
-    $this->dramaCool->importHomePage($kshowLink, array('type'=>VIDEO_TYPE_SHOW));
+    $this->dramaCool->importHomePage($dramaLink, array('type'=>VIDEO_TYPE_DRAMA, 'page' => 25));
+    $this->dramaCool->importHomePage($movieLink, array('type'=>VIDEO_TYPE_MOVIE, 'page' => 1));
+    $this->dramaCool->importHomePage($kshowLink, array('type'=>VIDEO_TYPE_SHOW, 'page' => 10));
   }
-  #/Applications/XAMPP/xamppfiles/bin/php-5.5.15 /Datas/Sources/VideoFW/index.php import_data console_update_video_streaming_status 
-  public function console_update_video_streaming_status(){
-    echo "console_update_video_streaming_status:\n";
-    $updateStreamingStatus = $this->Config_model->getValue('update_streaming_status');
-    if($updateStreamingStatus==1){
-      $this->Video_model->updateImportStatus(0);
-    }
-    $this->Config_model->setValue('update_streaming_status', 0);//begin
-    die();
-  }
-  #/Applications/XAMPP/xamppfiles/bin/php-5.5.15 /Datas/Sources/VideoFW/index.php import_data console_update_video_streaming 
+  #/Applications/XAMPP/xamppfiles/bin/php-5.5.15 /Datas/Sources/VideoFW/index.php import_data console_update_video_streaming
   public function console_update_video_streaming(){
     echo "console_update_video_streaming:\n";
     $time1 = time();
     $whereClause = " import_status IS NULL OR import_status=0";
-    $videoList = $this->Video_model->getRange($whereClause, 0, 1, 'id ASC');
+    $videoList = $this->Video_model->getRange($whereClause, 0, 10000, 'id ASC');
     if($videoList){
       foreach($videoList as $video){
         $originalUrl = $video['original_url'];
         $this->dramaCool->updateStreaming($video['id'], $originalUrl);
         $dataStatus = array();
         $dataStatus['import_status'] = 1;
-        //$this->Video_model->update($video['id'], $dataStatus);
+        $this->Video_model->update($video['id'], $dataStatus);
       }
-    }else{
-      $this->Config_model->setValue('update_streaming_status', 1);//done
     }
     $time2 = time();
     echo "console_update_video_streaming: ".($time2 - $time1)."\n";
