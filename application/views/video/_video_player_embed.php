@@ -12,11 +12,7 @@
 <script>
   videojs.options.flash.swf = "<?php echo $theme_path?>/swf/video-js.swf";
 </script>
-<div class="box-player">
-  <div class="container">
-    <div class="row">
-      <div class="col-sm-12">
-        <div class="player">
+
           <?php
           if($data):
             $streamingUrl = base64_decode($data);
@@ -29,11 +25,4 @@
             Video will update as soon as possible. Thank you!
           <?php endif;?>
           <div id="_updating_streaming_msg" class="hidden">Try Loading video ...</div>
-
-
-        </div><!-- /.player -->
-      </div><!-- /.col-sm-12 -->
-    </div><!-- /.row -->
-  </div><!-- /.container -->
-</div>
 
