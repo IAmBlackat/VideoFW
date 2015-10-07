@@ -49,6 +49,13 @@ endif
               </ul>
             </div><!-- /.ui-server -->
             <iframe allowfullscreen='true' webkitallowfullscreen='true' mozallowfullscreen='true' marginheight='0' marginwidth='0' scrolling='no' frameborder='0' width='854' height='520' src='<?php echo $defaultIframe?>' target='_blank'></iframe>
+            <div class="ui-share">
+              <span>Share with love</span>
+              <ul>
+                <li><a href="#" class="fa fa-facebook-square"></a></li>
+                <li><a href="#" class="fa fa-twitter-square"></a></li>
+              </ul>
+            </div><!-- /.ui-share -->
           </div><!-- /.player -->
         </div><!-- /.col-sm-12 -->
       </div><!-- /.row -->
@@ -56,6 +63,19 @@ endif
   </div>
 </div>
 <?php endif;?>
+
+<div class="vi-meta">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12">
+        <h3 class="vi-title">A Look at Myself Episode 6</h3>
+        <div class="vi-des">
+          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iusto laboriosam neque dicta totam sint saepe, doloribus nesciunt, dolore eaque obcaecati molestias blanditiis natus deserunt labore animi nobis, earum suscipit voluptatem?</p>
+        </div>
+      </div><!-- /.col-sm-12 -->
+    </div><!-- /.row -->
+  </div><!-- /.container -->
+</div><!-- /.vi-meta -->
 
 <!--<div id="logs_view" element_id="<?php echo $video['id']?>" data-type="video"></div> -->
 <div class="container">
