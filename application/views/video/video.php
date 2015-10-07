@@ -2,6 +2,7 @@
 $videoUrlArr = $video['video_url'];
 $defaultIframe = '';
 $selectedServerData = array();
+$hasGoogleServer = FALSE;
 if($videoUrlArr){
   $i = 0;
   foreach($videoUrlArr as $urlId => $urlData) {
@@ -9,11 +10,13 @@ if($videoUrlArr){
       $selectedServerData = $urlData;
     }
     $i++;
-    if ($urlData['server_type'] == SERVER_TYPE_STANDARD || $urlData['server_type'] == SERVER_TYPE_HD) {
-      $selectedServerData = $urlData;
-    }
     $serverType = isset($server_type[$urlData['server_type']]) ? $server_type[$urlData['server_type']] : SERVER_TYPE_STANDARD;
     $videoUrlArr[$urlId]['server_type'] = $serverType;
+    if ($urlData['server_type'] == SERVER_TYPE_STANDARD || $urlData['server_type'] == SERVER_TYPE_HD) {
+      $selectedServerData = $urlData;
+      $hasGoogleServer = TRUE;
+    }
+
     $iframeSrc = '';
     if ($urlData['server_type'] == SERVER_TYPE_STANDARD || $urlData['server_type'] == SERVER_TYPE_HD) {
       $iframeSrc = base_url('embed').'/'.$urlData['id'] .'/'.$urlData['video_id']. '/' . rawurlencode($urlData['streaming_url']);
@@ -60,8 +63,11 @@ if($videoUrlArr){
               </ul>
             </div><!-- /.ui-share -->
             <i>Note: If all Server can't watch please refresh page again may be auto fix! Thanks and Enjoy!!</i>
+            <?php if($hasGoogleServer==FALSE):?>
+              <div id="logs_view" element_id="<?php echo $video['id']?>" data-type="video"></div>
+            <?php endif;?>
           <?php else:?>
-            <div id="logs_view" element_id="<?php echo $video['id']?>" data-type="video"></div>
+
             We lost few servers.Then, few episodes can't Watch . We fixing all episodes.
           <?php endif;?>
           </div><!-- /.player -->
