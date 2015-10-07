@@ -144,6 +144,6 @@ define("DEFAULT_DESCRIPTION", "watch drama online, watch movie online, watch sho
 define("DEFAULT_KEYWORD", "watch, drama, show, movie, online");
 define("DEFAULT_TITLE", SITE_NAME);
 
-define("FACEBOOK_APP_ID", '760052114110785');
+define("FACEBOOK_APP_ID", '518427084990365');
 
 define("EXTRA_DESCRIPTION", ' Dramalist will always be the first to have the episode so please add us on <a title="Dramalist" href="https://www.facebook.com/KDramaShare">Facebook</a> for update! Enjoy');

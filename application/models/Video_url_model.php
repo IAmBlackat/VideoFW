@@ -45,7 +45,22 @@ class Video_Url_model extends CI_Model {
     $data = $query->result_array();
     return $data;
   }
+  function getAllVideoUrlByVideoId($videoId){
+    $ret = array();
+    try {
+      $sql = "SELECT * FROM " . self::TABLE_NAME . " WHERE video_id = ?";
+      $query = $this->db->query($sql, array($videoId));
+      $datas = $query->result_array();
+      if($datas){
+        foreach($datas as $data){
+          $ret[$data['server_type']] = $data;
+        }
+      }
+    } catch (Exception $ex) {
 
+    }
+    return $ret;
+  }
   function getTotal($where = '') {
     $whereClause = "";
     if (!empty($where)) {

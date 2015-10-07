@@ -107,7 +107,7 @@ class Video_model extends CI_Model {
   function getByIdFull($id) {
     $data = array();
     try {
-      $sql = "SELECT v.*, vu.id as vuid, vu.streaming_url, vu.type, vu.is_part, vu.iframe_url, vu.server_type ".
+      $sql = "SELECT v.*, vu.id as vuid, vu.streaming_url, vu.type, vu.is_part, vu.iframe_url, vu.server_type, vu.video_id ".
         " FROM " . self::TABLE_NAME . ' AS v '. 
         " LEFT JOIN video_url AS vu ON v.id=vu.video_id".
         " WHERE v." . self::TABLE_KEY . " = ?";
@@ -116,14 +116,18 @@ class Video_model extends CI_Model {
       if ($datas) {
         $videoUrl = array();
         foreach($datas as $d){
-          $videoUrl[$d['vuid']] = array(
-            'id' => $d['vuid'],
-            'streaming_url' => $d['streaming_url'],
-            'type' => $d['type'],
-            'server_type' => $d['server_type'],
-            'iframe_url' => $d['iframe_url'],
-            'is_part' => $d['is_part']
+          if($d['vuid']){
+            $videoUrl[$d['vuid']] = array(
+              'id' => $d['vuid'],
+              'streaming_url' => $d['streaming_url'],
+              'type' => $d['type'],
+              'server_type' => $d['server_type'],
+              'iframe_url' => $d['iframe_url'],
+              'video_id' => $d['video_id'],
+              'is_part' => $d['is_part']
             );
+          }
+
         }
         $data = $datas[0];
         $data['video_url'] = $videoUrl;
@@ -185,9 +189,10 @@ class Video_model extends CI_Model {
 	}
   function removeSeriesOfVideo($videoId){
     $params['series_id'] = 0;
-		$this->db->update(self::TABLE_NAME, $params, array(self::TABLE_KEY => $videoId));
+    $result = $this->db->update(self::TABLE_NAME, $params, array(self::TABLE_KEY => $videoId));
 		return $result;
   }
+
   function getVideoByOriginalUrl($originalUrl=""){
 		$data = array();
 		if(!empty($originalUrl)){

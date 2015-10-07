@@ -10,10 +10,7 @@ $curUri = isset($_SERVER['PATH_INFO']) ? $_SERVER['PATH_INFO'] : '';
           <li<?php if($curUri=='/drama-list.html') echo ' class="current"'?>><a href="/drama-list.html">Drama List</a></li>
           <li<?php if($curUri=='/movies-list.html') echo ' class="current"'?>><a href="/movies-list.html">Movie List</a></li>
           <li<?php if($curUri=='/show-list.html') echo ' class="current"'?>><a href="/show-list.html">Kshow List</a></li>
-          <li><a href="#">Blog</a></li>
-          <li><a href="#">Single Page</a></li>
           <li><a href="#">Contact</a></li>
-          <li><a href="#">Buy Now</a></li>
         </ul><!-- /.nav-top -->
         <div class="box-search">
           <form action="/search" method="get" id="_frmSearch">

@@ -1,83 +1,89 @@
 <?php
 $videoUrlArr = $video['video_url'];
 $defaultIframe = '';
-if($videoUrlArr):
-  $selectedServer = 0;
+$selectedServerData = array();
+if($videoUrlArr){
   $i = 0;
-  $selectedServerData = array();
-  $firstUrlId = 0;
-  foreach($videoUrlArr as $urlId => $urlData):
-    if($i==0){
+  foreach($videoUrlArr as $urlId => $urlData) {
+    if ($i == 0) {
       $selectedServerData = $urlData;
     }
     $i++;
-    if($urlData['server_type']==SERVER_TYPE_STANDARD || $urlData['server_type'] == SERVER_TYPE_HD){
+    if ($urlData['server_type'] == SERVER_TYPE_STANDARD || $urlData['server_type'] == SERVER_TYPE_HD) {
       $selectedServerData = $urlData;
     }
     $serverType = isset($server_type[$urlData['server_type']]) ? $server_type[$urlData['server_type']] : SERVER_TYPE_STANDARD;
+    $videoUrlArr[$urlId]['server_type'] = $serverType;
     $iframeSrc = '';
-    if($urlData['iframe_url']){
+    if ($urlData['server_type'] == SERVER_TYPE_STANDARD || $urlData['server_type'] == SERVER_TYPE_HD) {
+      $iframeSrc = base_url('embed').'/'.$urlData['id'] .'/'.$urlData['video_id']. '/' . rawurlencode($urlData['streaming_url']);
+    } else {
       $iframeSrc = $urlData['iframe_url'];
-    }else{
-      $iframeSrc = base_url('embed').'/'.rawurlencode($urlData['streaming_url']);
     }
-?>
-  <div class="_select_server" data-id="<?php echo $urlData['id']?>" data-iframe="<?php echo $iframeSrc?>"><?php echo $serverType['name']?></div>
-<?php
-  endforeach;
-  if($selectedServerData['iframe_url']){
-    $defaultIframe = $selectedServerData['iframe_url'];
-
-  }else{
-    $defaultIframe = base_url('embed').'/'.rawurlencode($selectedServerData['streaming_url']);
+    $videoUrlArr[$urlId]['iframe_src'] = $iframeSrc;
   }
-endif
+  if($selectedServerData['server_type'] == SERVER_TYPE_STANDARD || $selectedServerData['server_type'] == SERVER_TYPE_HD){
+    $defaultIframe = base_url('embed').'/'.$selectedServerData['id'].'/'.$selectedServerData['video_id'].'/'.rawurlencode($selectedServerData['streaming_url']);
+  }else{
+    $defaultIframe = $selectedServerData['iframe_url'];
+  }
+}
 ?>
-<?php if($defaultIframe):?>
-<div id="_video_player">
+
+<div>
   <div class="box-player">
     <div class="container">
       <div class="row">
         <div class="col-sm-12">
           <div class="player">
+          <?php if($videoUrlArr):?>
             <div class="ui-server">
               <ul>
-                <li class="active"><a href="#">Sever 1</a></li>
-                <li><a href="#">Sever 2</a></li>
-                <li><a href="#">Sever 3</a></li>
-                <li><a href="#">Sever 4</a></li>
+                <?php
+                foreach($videoUrlArr as $urlData):
+                ?>
+                <li class="<?php if($urlData['id'] == $selectedServerData['id']) echo 'active'?>"><a class="_select_server <?php echo $urlData['server_type']['alias']?>" href="#" data-id="<?php echo $urlData['id']?>" data-iframe="<?php echo $urlData['iframe_src']?>"><?php echo $urlData['server_type']['name']?></a></li>
+                <?php
+                endforeach;
+                ?>
+
               </ul>
             </div><!-- /.ui-server -->
-            <iframe allowfullscreen='true' webkitallowfullscreen='true' mozallowfullscreen='true' marginheight='0' marginwidth='0' scrolling='no' frameborder='0' width='854' height='520' src='<?php echo $defaultIframe?>' target='_blank'></iframe>
+            <iframe id="_video_player_iframe" allowfullscreen='true' webkitallowfullscreen='true' mozallowfullscreen='true' marginheight='0' marginwidth='0' scrolling='no' frameborder='0' width='854' height='520' src='<?php echo $defaultIframe?>' target='_blank'></iframe>
             <div class="ui-share">
               <span>Share with love</span>
               <ul>
-                <li><a href="#" class="fa fa-facebook-square"></a></li>
-                <li><a href="#" class="fa fa-twitter-square"></a></li>
+                <li>
+                  <a id="_fbshare" data-href="http://www.facebook.com/sharer.php?u=<?php echo makeLink($video['id'], $video['title'], 'video')?>&t=<?php echo $video['title']?>" href="#" class="fa fa-facebook-square"></a>
+                </li>
+                <li><a id="_twiter_share" data-href="http://twitter.com/share?url=<?php echo makeLink($video['id'], $video['title'], 'video')?>&text=<?php echo $video['title']?>&count=none/" href="#" class="fa fa-twitter-square"></a></li>
               </ul>
             </div><!-- /.ui-share -->
+            <i>Note: If all Server can't watch please refresh page again may be auto fix! Thanks and Enjoy!!</i>
+          <?php else:?>
+            <div id="logs_view" element_id="<?php echo $video['id']?>" data-type="video"></div>
+            We lost few servers.Then, few episodes can't Watch . We fixing all episodes.
+          <?php endif;?>
           </div><!-- /.player -->
         </div><!-- /.col-sm-12 -->
       </div><!-- /.row -->
     </div><!-- /.container -->
   </div>
 </div>
-<?php endif;?>
 
 <div class="vi-meta">
   <div class="container">
     <div class="row">
       <div class="col-sm-12">
-        <h3 class="vi-title">A Look at Myself Episode 6</h3>
+        <h3 class="vi-title"><?php echo $video['title']?></h3>
         <div class="vi-des">
-          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iusto laboriosam neque dicta totam sint saepe, doloribus nesciunt, dolore eaque obcaecati molestias blanditiis natus deserunt labore animi nobis, earum suscipit voluptatem?</p>
+          <p><?php echo getVideoDescription($video) ?></p>
         </div>
       </div><!-- /.col-sm-12 -->
     </div><!-- /.row -->
   </div><!-- /.container -->
 </div><!-- /.vi-meta -->
 
-<!--<div id="logs_view" element_id="<?php echo $video['id']?>" data-type="video"></div> -->
 <div class="container">
   <div class="row">
     <?php $this->load->view('templates/sidebar'); ?>

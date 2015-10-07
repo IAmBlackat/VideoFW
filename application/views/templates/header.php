@@ -25,7 +25,7 @@
       </div><!-- /.col-sm-3 -->
       <div class="col-sm-9">
         <div class="top-banner-728x90 center-block">
-          <a href="#"><img src="https://unsplash.it/728/90?random" alt="video title" class="img-responsive"></a>
+          <a href="/"><img src="<?php echo $theme_path ?>images/top_banner.jpg" alt="Drama list" class="img-responsive"></a>
         </div><!-- /.top-banner-728x90 -->
       </div><!-- /.col-sm-9 -->
     </div><!-- /.row -->

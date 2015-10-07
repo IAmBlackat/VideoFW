@@ -11,8 +11,8 @@ $genreList = $extra_data['left_nav_genre'];
     </ul>
   </div><!-- /.ui-list-cate -->
   <div class="widget promote-zone">
-    <a href="#">
-      <img src="https://unsplash.it/300/300?random" alt="video title" class="img-responsive" />
+    <a href="/">
+      <img src="<?php echo $theme_path ?>images/right_banner.jpg" alt="Drama list" class="img-responsive" />
     </a>
   </div><!-- /.widget promote-zone -->
 </div>
