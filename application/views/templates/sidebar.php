@@ -4,6 +4,7 @@ $genreList = $extra_data['left_nav_genre'];
 ?>
 <div class="sidebar col-sm-3">
   <div class="widget ui-list-cate">
+    <h2 class="widget-title">Top Genre</h2>
     <ul>
       <?php foreach($genreList as $genre):?>
         <li><a href="<?php echo makeLink($genre['id'], $genre['name'], 'genre')?>"><?php echo $genre['name'] ?></a></li>
