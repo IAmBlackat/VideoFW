@@ -104,7 +104,7 @@ if($videoUrlArr){
           </li>-->
           <li>
             <span class="slabel <?php echo $v['has_sub'] ? 'sub' : 'raw'?>"><?php echo $v['has_sub'] ? 'Sub' : 'Raw'?></span>
-            <a href="<?php echo makeLink($v['id'], $v['title'], 'video')?>"><?php echo 'Episode '.$v['episode']?></a></i>
+            <a href="<?php echo makeLink($v['id'], $v['title'], 'video')?>">Episode <?php echo $v['episode'] > 9 ? $v['episode'] : '0'.$v['episode']?></a></i>
           </li>
           <?php endforeach;?>
         </ul><!-- /.list-episode -->
