@@ -58,10 +58,9 @@ $videoLink = makeLink($video['id'], $video['title'], 'video');
             <div class="ui-share">
               <span>Share with love</span>
               <ul>
-                <li>
-                  <a id="_fbshare" data-href="http://www.facebook.com/sharer.php?u=<?php echo $videoLink?>&t=<?php echo $video['title']?>" href="#" class="fa fa-facebook-square"></a>
-                </li>
+                <li><a id="_fbshare" data-href="http://www.facebook.com/sharer.php?u=<?php echo $videoLink?>&t=<?php echo $video['title']?>" href="#" class="fa fa-facebook-square"></a></li>
                 <li><a id="_twiter_share" data-href="http://twitter.com/share?url=<?php echo $videoLink?>&text=<?php echo $video['title']?>&count=none/" href="#" class="fa fa-twitter-square"></a></li>
+                <li><div class="fb-send" data-href="<?php echo $videoLink?>"></div></li>
               </ul>
             </div><!-- /.ui-share -->
             <i>Note: If all Server can't watch please refresh page again may be auto fix! Thanks and Enjoy!!</i>

@@ -3,6 +3,9 @@ if($extra_data && isset($extra_data['left_nav_genre'])):
 $genreList = $extra_data['left_nav_genre'];
 ?>
 <div class="sidebar col-sm-3">
+  <div class="widget ui-fanpage">
+    <div class="fb-page" data-href="https://www.facebook.com/KDramaShare" data-width="300" data-height="70" data-small-header="true" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="false" data-show-posts="false"><div class="fb-xfbml-parse-ignore"><blockquote cite="https://www.facebook.com/KDramaShare"><a href="https://www.facebook.com/KDramaShare">Dramalist.net</a></blockquote></div></div>
+  </div><!-- /.widget ui-fanpage -->
   <div class="widget ui-list-cate">
     <h2 class="widget-title">Top Genre</h2>
     <ul>
