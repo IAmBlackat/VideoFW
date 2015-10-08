@@ -20,6 +20,7 @@ class Genre extends MY_Controller {
   public function detail($page = "detail") {
     $uri = $this->uri->segment(2);
     $genreName = str_replace('.html', '', $uri);
+    $genreName = str_replace('-', ' ', $genreName);
     $genre = $this->Genre_model->getByName($genreName);
     if ($genre) {
       $pageNum = isset($_GET['p']) ? intval($_GET['p']) : 1;

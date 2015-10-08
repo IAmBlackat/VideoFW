@@ -31,6 +31,8 @@ if($videoUrlArr){
     $defaultIframe = $selectedServerData['iframe_url'];
   }
 }
+
+$videoLink = makeLink($video['id'], $video['title'], 'video');
 ?>
 
 <div>
@@ -57,9 +59,9 @@ if($videoUrlArr){
               <span>Share with love</span>
               <ul>
                 <li>
-                  <a id="_fbshare" data-href="http://www.facebook.com/sharer.php?u=<?php echo makeLink($video['id'], $video['title'], 'video')?>&t=<?php echo $video['title']?>" href="#" class="fa fa-facebook-square"></a>
+                  <a id="_fbshare" data-href="http://www.facebook.com/sharer.php?u=<?php echo $videoLink?>&t=<?php echo $video['title']?>" href="#" class="fa fa-facebook-square"></a>
                 </li>
-                <li><a id="_twiter_share" data-href="http://twitter.com/share?url=<?php echo makeLink($video['id'], $video['title'], 'video')?>&text=<?php echo $video['title']?>&count=none/" href="#" class="fa fa-twitter-square"></a></li>
+                <li><a id="_twiter_share" data-href="http://twitter.com/share?url=<?php echo $videoLink?>&text=<?php echo $video['title']?>&count=none/" href="#" class="fa fa-twitter-square"></a></li>
               </ul>
             </div><!-- /.ui-share -->
             <i>Note: If all Server can't watch please refresh page again may be auto fix! Thanks and Enjoy!!</i>
@@ -112,6 +114,9 @@ if($videoUrlArr){
       <?php endif;?>
 
       <?php $this->load->view('video/_video_item', array('randomGenre'=> $randomGenre,'suggestSeriesList' => $suggestSeriesList)); ?>
+      <div class="box-comment">
+        <div class="fb-comments" data-href="<?php echo $videoLink?>" data-width="847" data-numposts="10"></div>
+      </div>
 
 
     </div><!-- /.col-sm-9 -->

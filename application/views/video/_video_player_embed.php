@@ -30,10 +30,10 @@
   var video = videojs('_videojs');
   video.watermark({
     file: '<?php echo $theme_path ?>images/watermark.png',
-    xpos: 50,
-    ypos: 50,
-    xrepeat: 0,
-    opacity: 0.5,
+    xpos: 100,
+    ypos: 0,
+    opacity: 0.8,
+    className: 'vjs-watermark'
   });
 
   jQuery(document).ready(function () {
