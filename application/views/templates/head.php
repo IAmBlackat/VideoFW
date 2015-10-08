@@ -48,7 +48,9 @@
   <script>
     $(document).ready(function () {
       $('.slider').slick({
-        autoplay: true;
+        infinite: true,
+        dots: true,
+        autoplay: true,
       });
     });
   </script>

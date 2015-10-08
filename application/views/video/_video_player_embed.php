@@ -10,13 +10,6 @@
 <script src="<?php echo $theme_path ?>js/videojs.watermark.js"></script>
 <script>
   videojs.options.flash.swf = "<?php echo $theme_path?>/swf/video-js.swf";
-  video.watermark({
-    file: '<?php echo $theme_path ?>watermark.png',
-    xpos: 50,
-    ypos: 50,
-    xrepeat: 0,
-    opacity: 0.5,
-  });
 </script>
 
   <?php
@@ -34,6 +27,15 @@
 
 <script type="text/javascript">
   var BASE_URL = "<?php echo base_url() ?>";
+  var video = videojs('_videojs');
+  video.watermark({
+    file: '<?php echo $theme_path ?>images/watermark.png',
+    xpos: 50,
+    ypos: 50,
+    xrepeat: 0,
+    opacity: 0.5,
+  });
+
   jQuery(document).ready(function () {
     var elementId = <?php echo $video_id?>;
     var urlId = <?php echo $url_id?>;
