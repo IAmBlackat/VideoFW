@@ -5,8 +5,18 @@
 <script src="<?php echo $theme_path ?>js/video-js.js"></script>
 <link href="<?php echo $theme_path ?>css/video-js-resolutions.css" rel="stylesheet" type="text/css" />
 <script src="<?php echo $theme_path ?>js/video-js-resolutions.js"></script>
+
+<link href="<?php echo $theme_path ?>css/videojs.watermark.css" rel="stylesheet" type="text/css" />
+<script src="<?php echo $theme_path ?>js/videojs.watermark.js"></script>
 <script>
   videojs.options.flash.swf = "<?php echo $theme_path?>/swf/video-js.swf";
+  video.watermark({
+    file: '<?php echo $theme_path ?>watermark.png',
+    xpos: 50,
+    ypos: 50,
+    xrepeat: 0,
+    opacity: 0.5,
+  });
 </script>
 
   <?php

@@ -113,11 +113,6 @@ if($videoUrlArr){
 
       <?php $this->load->view('video/_video_item', array('randomGenre'=> $randomGenre,'suggestSeriesList' => $suggestSeriesList)); ?>
 
-      <div class="box-comment">
-        <div class="fb-comments" data-href="http://dramalist.net" data-width="847" data-numposts="10"></div>
-      </div>
-      <!-- /.box-comment -->
-
 
     </div><!-- /.col-sm-9 -->
   </div><!-- /.row -->
