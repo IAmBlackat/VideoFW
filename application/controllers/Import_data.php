@@ -38,9 +38,9 @@ class Import_Data extends MY_Controller {
     $movieLink = "http://www.dramacool.com/drama/recentmovie/page/";
     $kshowLink = "http://www.dramacool.com/drama/recentkshow/page/";
     echo "console_update_new_data:\n";
-    $this->dramaCool->importHomePage($dramaLink, array('type'=>VIDEO_TYPE_DRAMA, 'page' => 25));
+    $this->dramaCool->importHomePage($dramaLink, array('type'=>VIDEO_TYPE_DRAMA, 'page' => 10));
     $this->dramaCool->importHomePage($movieLink, array('type'=>VIDEO_TYPE_MOVIE, 'page' => 1));
-    $this->dramaCool->importHomePage($kshowLink, array('type'=>VIDEO_TYPE_SHOW, 'page' => 10));
+    $this->dramaCool->importHomePage($kshowLink, array('type'=>VIDEO_TYPE_SHOW, 'page' => 5));
   }
   #/Applications/XAMPP/xamppfiles/bin/php-5.5.15 /Datas/Sources/VideoFW/index.php import_data console_update_video_streaming
   public function console_update_video_streaming(){

@@ -88,20 +88,21 @@ class Series extends MY_Controller {
     $seriesId = getIdFromUri($uri);
 
     $series = $this->Series_model->getById($seriesId);
-    $videosOfSeries = $this->Video_model->getRange("series_id=" . $seriesId, $offset, ITEM_PER_PAGE_8);
-    $data['videosOfSeries'] = $videosOfSeries;
-    $total = $this->Video_model->getTotal("series_id=" . $seriesId);
 
-    $newestVideoOfSeries = $this->Video_model->getNewVideoOfSeries($seriesId, 1);
+    if ($series) {
+      $videosOfSeries = $this->Video_model->getRange("series_id=" . $seriesId, $offset, ITEM_PER_PAGE_8);
+      $data['videosOfSeries'] = $videosOfSeries;
+      $total = $this->Video_model->getTotal("series_id=" . $seriesId);
 
-    $data['total'] = $total;
-    $data['max'] = ITEM_PER_PAGE_8;
-    $data['offset'] = $offset;
-    $data['newestVideo'] = isset($newestVideoOfSeries[0]) ? $newestVideoOfSeries[0]: array();
-    $this->layout->title("Series ".$series['title']);
-    $metaData['page_link'] = rtrim(base_url(), '/'). $_SERVER['REDIRECT_URL'];
-    $this->layout->setMeta($metaData);
-    if ($videosOfSeries) {
+      $newestVideoOfSeries = $this->Video_model->getNewVideoOfSeries($seriesId, 1);
+
+      $data['total'] = $total;
+      $data['max'] = ITEM_PER_PAGE_8;
+      $data['offset'] = $offset;
+      $data['newestVideo'] = isset($newestVideoOfSeries[0]) ? $newestVideoOfSeries[0]: array();
+      $this->layout->title("Series ".$series['title']);
+      $metaData['page_link'] = rtrim(base_url(), '/'). $_SERVER['REDIRECT_URL'];
+      $this->layout->setMeta($metaData);
       $data['series'] = $series;
       $data['videosOfSeries'] = $videosOfSeries;
       $this->layout->view('series/' . $page, $data);
