@@ -47,7 +47,9 @@
   <script type="text/javascript" src="<?php echo $theme_path ?>js/slick.min.js"></script>
   <script>
     $(document).ready(function () {
-      $('.slider').slick();
+      $('.slider').slick({
+        autoplay: true;
+      });
     });
   </script>
 </head>

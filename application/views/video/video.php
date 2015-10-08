@@ -98,9 +98,13 @@ if($videoUrlArr){
       <div class="ui-list-episode">
         <ul class="list-episode">
           <?php foreach($videoOfSeries as $v):?>
-          <li>
+          <!--<li>
             <span class="slabel <?php echo $v['has_sub'] ? 'sub' : 'raw'?>"><?php echo $v['has_sub'] ? 'Sub' : 'Raw'?></span>
             <a href="<?php echo makeLink($v['id'], $v['title'], 'video')?>"><?php echo $v['title']?></a><i><?php echo date("Y/m/d", strtotime($v['publish_date']));?></i>
+          </li>-->
+          <li>
+            <span class="slabel <?php echo $v['has_sub'] ? 'sub' : 'raw'?>"><?php echo $v['has_sub'] ? 'Sub' : 'Raw'?></span>
+            <a href="<?php echo makeLink($v['id'], $v['title'], 'video')?>"><?php echo 'Episode 1'?></a></i>
           </li>
           <?php endforeach;?>
         </ul><!-- /.list-episode -->
@@ -108,6 +112,11 @@ if($videoUrlArr){
       <?php endif;?>
 
       <?php $this->load->view('video/_video_item', array('randomGenre'=> $randomGenre,'suggestSeriesList' => $suggestSeriesList)); ?>
+
+      <div class="box-comment">
+        <div class="fb-comments" data-href="http://dramalist.net" data-width="847" data-numposts="10"></div>
+      </div>
+      <!-- /.box-comment -->
 
 
     </div><!-- /.col-sm-9 -->
