@@ -63,14 +63,16 @@ $videoLink = makeLink($video['id'], $video['title'], 'video');
                 <li><div class="fb-send" data-href="<?php echo $videoLink?>"></div></li>
               </ul>
             </div><!-- /.ui-share -->
-            <i>Note: If all Server can't watch please refresh page again may be auto fix! Thanks and Enjoy!!</i>
+            <i>If there any errors appear, please <a href="#" id="_reload_page"> reload the page </a> first. If errors reappear then report to us. Thanks and Enjoy!!</i>
             <?php if($hasGoogleServer==FALSE):?>
               <div id="logs_view" element_id="<?php echo $video['id']?>" data-type="video"></div>
             <?php endif;?>
           <?php else:?>
 
-            We lost few servers.Then, few episodes can't Watch . We fixing all episodes.
+            <i>We lost few servers.Then, few episodes can't Watch. Please <a href="#" id="_reload_page"> reload the page </a> first. We fixing all episodes. Thanks and Enjoy!!</i>
+            <div id="logs_view" element_id="<?php echo $video['id']?>" data-type="video"></div>
           <?php endif;?>
+
           </div><!-- /.player -->
         </div><!-- /.col-sm-12 -->
       </div><!-- /.row -->

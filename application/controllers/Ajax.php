@@ -73,17 +73,18 @@ class ajax extends MY_Controller {
     $urlId = isset($_POST['url_id']) ? intval($_POST['url_id']) : 0;
     $status = isset($_POST['status']) ? intval($_POST['status']) : 0;
     if($status==0){
+      $ret['urlId'] = $urlId;
       $this->load->library('simple_html_dom');
       $this->load->file(APPPATH.'components/ImportDramaCool.php');
       $dramaCool = new ImportDramaCool();
       $videoObj = $this->Video_model->getById($elementId);
       if($videoObj){
         $updateResult = $dramaCool->updateStreamingInLog($videoObj['id'], $videoObj['original_url']);
-        //$updateResult[113412] = 'abc';
-        $streamingUrl = isset($updateResult[$urlId]) ? $updateResult[$urlId] : '';
         if($updateResult){
           $ret['msg'] = 'updated';
-          $ret['surl'] = $streamingUrl;
+          if(isset($updateResult[$urlId])){
+            $ret['surl'] = $updateResult[$urlId];
+          }
         }else{
           $ret['msg'] = 'cannot updated';
         }

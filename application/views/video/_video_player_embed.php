@@ -51,19 +51,20 @@
             $.post(BASE_URL+"ajax/logs",{element_id: elementId, url_id: urlId, type: type, status: 0}, function( data ) {
               var jData = JSON.parse(data);
               if(jData.msg == 'updated'){
-                var surl = jData.surl;
+                var surl = atob(jData.surl);
                 if(surl){
+                  $.removeCookie(cookieName, { path: '/' });
                   videoPlayer.src({"type":"video/mp4", "src":surl})
+                }else{
+                  $.cookie(cookieName, "yes", { expires: 1, path: '/' } );
                 }
-                $.cookie(cookieName, "yes", { expires: 1, path: '/' } );
-                var currentLocation = window.location;
-                //window.location = currentLocation;
               }
             });
 
           }
         });
         videoPlayer.on('playing', function() {
+          console.debug("playing");
           $('#_updating_streaming_msg').addClass("hidden");
           $.removeCookie(cookieName, { path: '/' });
           $.post(BASE_URL+"ajax/logs",{element_id: elementId, type: type, url_id: urlId, status: 1}, function( data ) {

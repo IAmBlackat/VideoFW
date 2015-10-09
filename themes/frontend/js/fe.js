@@ -22,7 +22,11 @@ jQuery(document).ready(function () {
     window.open(url, "tweet", "height=600,width=600,resizable=1" )
     return false;
   });
-
+  $('#_reload_page').click(function(){
+    var currentLocation = window.location;
+    window.location = currentLocation;
+    return false;
+  });
 
 
 });
@@ -45,12 +49,13 @@ var Video = {
       var type = element.attr("data-type");
       //var cookieName = "_refresh_"+elementId;
       $.post(BASE_URL+"ajax/logs",{element_id: elementId, type: type, status: 0}, function( data ) {
-        if(data == 'updated'){
-          //if(cookieValue==null){
+        var jData = JSON.parse(data);
+        if(jData.msg == 'updated'){
+          if(jData.urlId==0){
             //$.cookie(cookieName, "yes", { expires: 1, path: '/' } );
-            //var currentLocation = window.location;
-            //window.location = currentLocation;
-          //}
+            var currentLocation = window.location;
+            window.location = currentLocation;
+          }
         }
       });
     }
