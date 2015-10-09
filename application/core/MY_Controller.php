@@ -63,4 +63,16 @@ class MY_Controller extends CI_Controller {
     $this->layout->js($skin.'js/fe.js');
 		$this->layout->css($skin.'css/style.css');
   }
+  public function setCacheHtml($name, $html, $time=NULL){
+    if($time==NULL){
+      $time = DEFAULT_CACHE_TIME_MINUTE * 60;
+    }
+    $this->load->driver('cache');
+    $this->cache->file->save($name, $html, $time);
+  }
+  public function getCacheHtml($name){
+    $this->load->driver('cache');
+    $html = $this->cache->file->get($name);
+    return $html;
+  }
 }

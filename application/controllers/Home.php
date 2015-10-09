@@ -26,9 +26,8 @@ class Home extends MY_Controller {
    * @param string $page
    */
   public function index($page = 'index') {
-    //$this->output->cache(3);
+    $this->output->cache(DEFAULT_CACHE_TIME_MINUTE);
     $data = array();
-
     //banner
     $banner = $this->Editor_Box_model->getByKey('home_slider');
     $viewData = array('data' => $banner);

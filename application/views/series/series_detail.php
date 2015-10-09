@@ -4,19 +4,19 @@
 
     <div class="wrap-content col-sm-9">
       <div class="section-line">
-        <div class="row pm-row">
+        <div class="row">
           <div class="col-sm-12">
             <div class="item-video item-feature">
-              <div class="row pm-row">
-                <div class="ui-thumb big-ui-thumb col-sm-6">
+              <div class="row">
+                <div class="ui-thumb big-ui-thumb col-sm-5">
                   <a href="<?php echo $newestVideo ? makeLink($newestVideo['id'], $newestVideo['title'], 'video') : '#'?>">
                     <img src="<?php echo getThumbnail($series['thumbnail'], 'series') ?>" alt="<?php echo $series['title']?>" class="img-responsive">
                     <span class="fa fa-play-circle-o"></span>
                   </a>
                 </div><!-- /.ui-thumb -->
-                <div class="ui-meta col-sm-6">
+                <div class="ui-meta col-sm-7">
                   <h3 class="ui-title"><a href="<?php echo $newestVideo ? makeLink($newestVideo['id'], $newestVideo['title'], 'video') : '#'?>" class="ui-ellipsis-2"><?php echo $series['title']?></a></h3>
-                  <p class="ellipsis-4"><?php echo $series['description']?></p>
+                  <p class="ellipsis-8"><?php echo $series['description']?></p>
                 </div><!-- /.ui-meta -->
               </div><!-- /.row -->
             </div><!-- /.item-video -->

@@ -6,16 +6,18 @@
         <p>About <strong><?php echo $total?></strong> results</p>
       </div>
       <?php if($listObject):?>
-        <?php foreach($listObject as $object):?>
+        <?php foreach($listObject as $object):
+          $detailLink = makeLink($object['id'], $object['title'], 'video');
+          ?>
         <div class="ui-list-item">
           <div class="thumb">
-            <a href="<?php echo makeLink($object['id'], $object['title'], 'series', $object['country'])?>">
-              <img src="<?php echo getThumbnail($object['thumbnail'], 'series') ?>" alt="<?php echo $object['title']?>" class="img-responsive">
+            <a href="<?php echo $detailLink?>">
+              <img src="<?php echo getThumbnail($object['series_thumbnail'], 'series') ?>" alt="<?php echo $object['title']?>" class="img-responsive">
             </a>
           </div><!-- /.thumb -->
           <div class="meta">
-            <h3 class="title"><a href="<?php echo makeLink($object['id'], $object['title'], 'series', $object['country'])?>"><?php echo $object['title']?></a></h3>
-            <p><?php echo subString($object['description'], 300)?></p>
+            <h3 class="title"><a href="<?php echo $detailLink ?>"><?php echo $object['title']?></a></h3>
+            <p><?php echo $object['series_desctiption']?></p>
           </div><!-- /.meta -->
         </div><!-- /.ui-list-item -->
         <?php endforeach;?>

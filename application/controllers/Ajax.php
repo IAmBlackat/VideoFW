@@ -64,7 +64,7 @@ class ajax extends MY_Controller {
   }
 
   public function logs() {
-    $strReturn = '';
+    $ret = array();
     $logsModel = null;
     $this->load->model('Logs_model', NULL, TRUE);
     $logsModel = new Logs_model();
@@ -78,103 +78,29 @@ class ajax extends MY_Controller {
       $dramaCool = new ImportDramaCool();
       $videoObj = $this->Video_model->getById($elementId);
       if($videoObj){
-        $r = $dramaCool->updateStreamingInLog($videoObj['id'], $videoObj['original_url']);
-        if($r){
-          $strReturn = 'updated';
+        $updateResult = $dramaCool->updateStreamingInLog($videoObj['id'], $videoObj['original_url']);
+        //$updateResult[113412] = 'abc';
+        $streamingUrl = isset($updateResult[$urlId]) ? $updateResult[$urlId] : '';
+        if($updateResult){
+          $ret['msg'] = 'updated';
+          $ret['surl'] = $streamingUrl;
         }else{
-          $strReturn = 'cannot update';
+          $ret['msg'] = 'cannot updated';
         }
       }else{
-        $strReturn = 'file not found';
+        $ret['msg'] = 'file not found';
       }
     }else{
-      $strReturn = 'playing';
+      $ret['msg'] = 'playing';
       if ($elementId) {
         $logsModel->writeLogs($elementId, $type);
       }
     }
-    echo $strReturn;
+    echo json_encode($ret);
   }
 
-  public function load_sidebar() {
-    $this->load->driver('cache');
-    //$this->cache->file->save('foo', 'bar', 1);
-    $foo = $this->cache->get('foo');
-    echo $foo;
-    $data['html'] = "";
-    $data['errorCode'] = 0;
-    $this->load->file(APPPATH . 'business/video_business.php');
-    $_bus = NewsBusiness::getInstance();
-    $genreId = isset($_POST['genre_id']) ? intval($_POST['genre_id']) : 0;
-    $type = isset($_POST['type']) ? $_POST['type'] : '';
-    $genreType = isset($_POST['genre_type']) ? $_POST['genre_type'] : '';
-    $showType = isset($_POST['show_type']) ? intval($_POST['show_type']) : "item"; //item or link
-    $offset = isset($_POST['offset']) ? intval($_POST['offset']) : 0;
-    $length = isset($_POST['length']) ? intval($_POST['length']) : ITEM_PER_PAGE;
-    switch ($type) {
-      case 'newest':
-        $data['errorCode'] = 1;
-        $cacheName = "_newest.";
-        if (!empty($genreId)) {
-          $cacheName .= 'gid.' . $genreId;
-          $newest = $_bus->listNewsByGenre($genreId, $offset, $length); //lay trang tiep theo de suggest
-          $title = "CÙNG CHUYÊN MỤC";
-          if ($genreType) {
-            $cacheName .= '.gtype.' . $genreType;
-            $title = "CHUYÊN MỤC " . mb_strtoupper($this->_config['genre'][$genreId]);
-          }
-        } else {
-          $cacheName .= 'gid.home';
-          $title = "MỚI NHẤT";
-          $newest = $_bus->getNewstNews();
-        }
-        if ($showType == 'link') {
-          $cacheName .= '.link';
-          $title = "CÓ THỂ BẠN QUAN TÂM";
 
-          $html = $this->getCacheHtml($cacheName); //lay trong cache file
-          if (empty($html)) {
-            $data['cached'] = false;
-            $html = $this->load->view("blocks/suggest/newest_link", array('datas' => $newest, 'title' => $title), true);
-            //set lai cache file
-            $this->setCacheHtml($cacheName, $html);
-          }
-        } else {
-          $cacheName .= '.item';
-          $html = $this->getCacheHtml($cacheName); //lay trong cache file
-          if (empty($html)) {
-            $data['cached'] = false;
-            $html = $this->load->view("blocks/suggest/newest", array('datas' => $newest, 'title' => $title), true);
-            //set lai cache file
-            $this->setCacheHtml($cacheName, $html);
-          }
-        }
-        $data['html'] = $html;
-        break;
-      case 'topview':
-        $topview = $_bus->getTopViewNews($offset, $length);
-        $data['errorCode'] = 1;
-        $data['cached'] = true;
-        $cacheName = "_topview";
-        $html = $this->getCacheHtml($cacheName); //lay trong cache file
-        if (empty($html)) {
-          $data['cached'] = false;
-          $html = $this->load->view("blocks/suggest/topview", array('datas' => $topview), true);
-          //set lai cache file
-          $this->setCacheHtml($cacheName, $html);
-        }
-        $data['html'] = $html;
-        break;
-      case 'facebook-fan':
-        $data['errorCode'] = 1;
-        $html = $this->load->view("blocks/suggest/facebook", array(), true);
-        $data['html'] = $html;
-        break;
-    }
-    echo json_encode($data);
-  }
-
-  public function deleteConfig() {
+  public function deleteCache() {
     $acc = isset($_GET['acc']) ? $_GET['acc'] : "";
     $action = isset($_GET['action']) ? $_GET['action'] : "";
     if ($acc == 'khuongpham') {

@@ -57,13 +57,22 @@ class Video_model extends CI_Model {
     if (!empty($where)) {
       $whereClause = " WHERE " . $where;
     }
-    $sql = "SELECT video.*, series.title as series_title, series.thumbnail as series_thumbnail 
+    $sql = "SELECT video.*, series.title as series_title, series.thumbnail as series_thumbnail, series.description as series_desctiption
       FROM video LEFT JOIN series 
         ON video.series_id = series.id ".
       $whereClause . $orderBy ." LIMIT $offset,$limit";
     $query = $this->db->query($sql);
     $data = $query->result_array();
     return $data;
+  }
+  function getTotalFull($where=''){
+    $sql = "SELECT COUNT(DISTINCT (video.id)) AS total
+      FROM video LEFT JOIN series
+        ON video.series_id = series.id ";
+    $sql = $sql.' WHERE '.$where;
+    $query = $this->db->query($sql);
+    $result = $query->result_array();
+    return $result[0]['total'];
   }
 
   function getTotal($where = '') {

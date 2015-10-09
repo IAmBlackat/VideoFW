@@ -43,14 +43,14 @@ var Video = {
       var element = $('#logs_view');
       var elementId = element.attr("element_id");
       var type = element.attr("data-type");
-      var cookieName = "_refresh_"+elementId;
+      //var cookieName = "_refresh_"+elementId;
       $.post(BASE_URL+"ajax/logs",{element_id: elementId, type: type, status: 0}, function( data ) {
         if(data == 'updated'){
-          if(cookieValue==null){
-            $.cookie(cookieName, "yes", { expires: 1, path: '/' } );
-            var currentLocation = window.location;
+          //if(cookieValue==null){
+            //$.cookie(cookieName, "yes", { expires: 1, path: '/' } );
+            //var currentLocation = window.location;
             //window.location = currentLocation;
-          }
+          //}
         }
       });
     }

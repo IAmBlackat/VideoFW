@@ -95,6 +95,8 @@ define('STATUS_HIDE',0);
 define('STATUS_SHOW',1);
 define('STATUS_WAIT_FOR_APPROVE',10);
 
+define('DEFAULT_CACHE_TIME_MINUTE', 30);//30 minutes
+
 define('SERIES_STATUS_ONGOING',0);
 define('SERIES_STATUS_COMPLETE',1);
 

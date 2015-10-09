@@ -23,23 +23,36 @@ class Search extends MY_Controller {
     $data = array();
     if(isset($_GET['keyword']) && strlen($_GET['keyword']) > 2){
       $keyword = filterText($_GET['keyword']);
+      $data['original_keyword'] = $keyword;
+      $keyword = strtolower($keyword);
+      $keyword = str_replace(' ep ', ' episode ', $keyword);
+
       $whereClause = "title LIKE '%" . $keyword . "%'";
       $pageNum = isset($_GET['p']) ? intval($_GET['p']) : 1;
       $offset = ($pageNum - 1) * ITEM_PER_PAGE;
       $total = $this->Series_model->getTotal($whereClause);
       $listObject = $this->Series_model->getRange($whereClause, $offset, ITEM_PER_PAGE);
       $data['keyword'] = $keyword;
-      $data['total'] = $total;
       $data['max'] = ITEM_PER_PAGE;
       $data['offset'] = $offset;
-      if ($listObject) {
+      $data['total'] = $total;
+      $this->layout->title('Search result for '.$keyword);
+      $metaData['page_link'] = makeLink(0, $keyword, 'search');
+      $this->layout->setMeta($metaData);
+      if(empty($listObject)){
+        $whereClause2 = "video.title LIKE '%" . $keyword . "%'";
+        $total = $this->Video_model->getTotalFull($whereClause2);
+        $data['total'] = $total;
+        $listVideo = $this->Video_model->getRangeFull($whereClause2, $offset, ITEM_PER_PAGE);
+        if($listVideo){
+          $data['listObject'] = $listVideo;
+          $this->layout->view('search/video', $data);
+        }else{
+          $this->layout->view('home/nodata', array());
+        }
+      }else{
         $data['listObject'] = $listObject;
-        $this->layout->title('Search result for '.$keyword);
-        $metaData['page_link'] = makeLink(0, $keyword, 'search');
-        $this->layout->setMeta($metaData);
         $this->layout->view('search/' . $page, $data);
-      } else {
-        $this->layout->view('home/nodata', array());
       }
     }else{
       redirect('');

@@ -48,19 +48,22 @@
         videoPlayer.on('error', function() {
           if(cookieValue==null){
             $('#_updating_streaming_msg').removeClass("hidden");
-          }
-          $.post(BASE_URL+"ajax/logs",{element_id: elementId, url_id: urlId, type: type, status: 0}, function( data ) {
-            if(data == 'updated'){
-              if(cookieValue==null){
+            $.post(BASE_URL+"ajax/logs",{element_id: elementId, url_id: urlId, type: type, status: 0}, function( data ) {
+              var jData = JSON.parse(data);
+              if(jData.msg == 'updated'){
+                var surl = jData.surl;
+                if(surl){
+                  videoPlayer.src({"type":"video/mp4", "src":surl})
+                }
                 $.cookie(cookieName, "yes", { expires: 1, path: '/' } );
                 var currentLocation = window.location;
                 //window.location = currentLocation;
               }
-            }
-          });
+            });
 
+          }
         });
-        videoPlayer.on('play', function() {
+        videoPlayer.on('playing', function() {
           $('#_updating_streaming_msg').addClass("hidden");
           $.removeCookie(cookieName, { path: '/' });
           $.post(BASE_URL+"ajax/logs",{element_id: elementId, type: type, url_id: urlId, status: 1}, function( data ) {

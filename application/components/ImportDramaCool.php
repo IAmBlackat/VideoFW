@@ -116,7 +116,7 @@ class ImportDramaCool {
       $videoData['series_id'] = $seriesId;
       $videoByOriginalUrl = $this->Video_model->getVideoByOriginalUrl($url);
       if (!$videoByOriginalUrl) {
-        $videoData['status'] = STATUS_WAIT_FOR_APPROVE;
+        $videoData['status'] = (isset($extraData['status']) && $extraData['status'] == STATUS_SHOW) ?  STATUS_SHOW : STATUS_WAIT_FOR_APPROVE;
         $videoId = $this->Video_model->insert($videoData);
       } else {
         $videoId = $videoByOriginalUrl['id'];
@@ -171,6 +171,7 @@ class ImportDramaCool {
     return $ret;
   }
   public function updateStreamingInLog($videoId, $url) {
+    $ret = array();
     $videoUrlArr = $this->Video_Url_model->getAllVideoUrlByVideoId($videoId);
     $videoData = $this->getVideoData($url);
     //hd 720
@@ -180,8 +181,10 @@ class ImportDramaCool {
       if(isset($videoUrlArr[SERVER_TYPE_HD])){
         $tmpData = $videoUrlArr[SERVER_TYPE_HD];
         $this->_updateStreamingUrl($tmpData['id'], $videoId, $streamingUrl, SERVER_TYPE_HD, VIDEO_TYPE_720, '');
+        $ret[$tmpData['id']] = $streamingUrl;
       }else{
-        $this->_insertStreamingUrl($videoId, $streamingUrl, SERVER_TYPE_HD, VIDEO_TYPE_720, '');
+        $sId = $this->_insertStreamingUrl($videoId, $streamingUrl, SERVER_TYPE_HD, VIDEO_TYPE_720, '');
+        $ret[$sId] = $streamingUrl;
       }
     }
     $streamingUrl = '';
@@ -193,8 +196,10 @@ class ImportDramaCool {
       if(isset($videoUrlArr[SERVER_TYPE_STANDARD])){
         $tmpData = $videoUrlArr[SERVER_TYPE_STANDARD];
         $this->_updateStreamingUrl($tmpData['id'], $videoId, $streamingUrl, SERVER_TYPE_STANDARD, VIDEO_TYPE_360, '');
+        $ret[$tmpData['id']] = $streamingUrl;
       }else{
-        $this->_insertStreamingUrl($videoId, $streamingUrl, SERVER_TYPE_STANDARD, VIDEO_TYPE_360, '');
+        $sId = $this->_insertStreamingUrl($videoId, $streamingUrl, SERVER_TYPE_STANDARD, VIDEO_TYPE_360, '');
+        $ret[$sId] = $streamingUrl;
       }
 
     }
@@ -228,7 +233,7 @@ class ImportDramaCool {
         $this->_insertStreamingUrl($videoId, $streamingUrl, SERVER_TYPE_SERVER1, VIDEO_TYPE_360, $iframePlayerLink);
       }
     }
-    return TRUE;
+    return $ret;
   }
   public function updateStreaming($videoId, $url, $isConsole = true) {
     if($isConsole){
@@ -290,7 +295,8 @@ class ImportDramaCool {
     if($iframeUrl){
       $videoUrlData['iframe_url'] = $iframeUrl;
     }
-    $this->Video_Url_model->insert($videoUrlData);
+    $id = $this->Video_Url_model->insert($videoUrlData);
+    return $id;
   }
   private function _updateStreamingUrl($urlId, $videoId, $streamingUrl, $serverType, $formatType = VIDEO_TYPE_360, $iframeUrl=''){
     $videoUrlData = array();
