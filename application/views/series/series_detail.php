@@ -16,7 +16,7 @@
                 </div><!-- /.ui-thumb -->
                 <div class="ui-meta col-sm-6">
                   <h3 class="ui-title"><a href="<?php echo $newestVideo ? makeLink($newestVideo['id'], $newestVideo['title'], 'video') : '#'?>" class="ui-ellipsis-2"><?php echo $series['title']?></a></h3>
-                  <p><?php echo $series['description']?></p>
+                  <p class="ellipsis-4"><?php echo $series['description']?></p>
                 </div><!-- /.ui-meta -->
               </div><!-- /.row -->
             </div><!-- /.item-video -->
