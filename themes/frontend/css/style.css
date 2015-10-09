@@ -10,3 +10,12 @@
 .info-search p {
 	margin-bottom: 0;
 }
+.no-data {
+	border: 1px solid #dedede;
+    border-radius: 3px;
+    padding: 50px 20px;
+    text-align: center;
+}
+.no-data p {
+	margin-bottom: 0;
+}
