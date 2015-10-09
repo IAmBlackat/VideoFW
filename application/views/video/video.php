@@ -65,7 +65,7 @@ $videoLink = makeLink($video['id'], $video['title'], 'video');
             </div><!-- /.ui-share -->
             <i>If there any errors appear, please <a href="#" id="_reload_page"> reload the page </a> first. If errors reappear then report to us. Thanks and Enjoy!!</i>
             <?php if($hasGoogleServer==FALSE):?>
-              <div id="logs_view" element_id="<?php echo $video['id']?>" data-type="video"></div>
+              <div id="logs_view" element_id="<?php echo $video['id']?>" data-type="video" data-update="gg"></div>
             <?php endif;?>
           <?php else:?>
 
