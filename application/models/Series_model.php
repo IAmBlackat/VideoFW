@@ -49,7 +49,7 @@ class Series_model extends CI_Model {
   function listSeriesByGenre($genreId, $offset=0, $itemPerPage=0, $isRandom=FALSE, $exceptId=0){
     $data = array();
     if($genreId){
-      $sql = "SELECT * FROM series
+      $sql = "SELECT series.* FROM series
               INNER JOIN series_genre
               ON series.id=series_genre.series_id
             WHERE series_genre.genre_id={$genreId} AND series.id <> $exceptId";
