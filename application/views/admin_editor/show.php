@@ -27,8 +27,8 @@
   <table class="stats" style="width: 100%">
     <thead>
       <th>No.</th>
-      <th>Thumbnail</th>
       <th>Item Text</th>
+      <th>Item Link</th>
       <th>Item Thumbnail</th>
     </thead>
     <tbody>
@@ -36,9 +36,9 @@
         <?php foreach ($itemOfbox as $n1 => $item): ?>
           <tr>
             <td><?php echo $n1 + 1 ?></td>
-            <td><a href="<?php echo base_url() ?>admin_editor/show?id=<?php echo $video['id'] ?>"><?php echo $video['title'] ?></a></td>
-            <td><?php echo $video['created_date'] ?></td>
-            <td><a href="<?php echo base_url() ?>ajax/remove_video_of_series?series_id=<?php echo $id ?>&video_id=<?php echo $video['id'] ?>">Remove</a></td>
+            <td><?php echo $item['item_text'] ?></td>
+            <td><?php echo $item['item_link'] ?></td>
+            <td><img src="<?php echo getThumbnail($item['item_thumbnail'], 'editor') ?>" /></td>
           </tr>
         <?php endforeach; ?>
       <?php endif; ?>

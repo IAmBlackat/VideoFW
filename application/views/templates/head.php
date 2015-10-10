@@ -17,6 +17,7 @@
   <meta property="og:image" content="<?php echo $image_for_layout ?>" />
   <meta property="og:site_name" content="<?php echo SITE_NAME ?>" />
   <meta property="og:url" content="<?php echo $url_for_layout ?>" />
+  <meta name="google-site-verification" content="B1AAeuc4Zk8hvGRUo07Pwle7f3sXw1L8x8K8so57iEc" />
   <!-- GOOGLE FONT
   ================================================== -->
   <link href='http://fonts.googleapis.com/css?family=Open+Sans:700italic,700,400,400italic,300italic' rel='stylesheet' type='text/css'>
