@@ -12,13 +12,13 @@ if ($datas):
           <div class="col-sm-3">
             <div class="item-video">
               <div class="ui-thumb">
-                <a href="<?php echo makeLink($data['video_id'], $data['video_title'], 'video')?>">
-                  <img src="<?php echo getThumbnail($data['thumbnail'], 'series') ?>" alt="<?php echo $data['title']?>" class="img-responsive" />
+                <a href="<?php echo makeLink($data['id'], $data['title'], 'video')?>">
+                  <img src="<?php echo getThumbnail($data['series']['thumbnail'], 'series') ?>" alt="<?php echo $data['series']['title']?>" class="img-responsive" />
                 </a>
-                <span class="episode">Episode <?php echo $data['video_episode']?></span>
+                <span class="episode">Episode <?php echo $data['episode']?></span>
               </div><!-- /.ui-thumb -->
               <div class="ui-meta">
-                <h3 class="ui-title"><a href="<?php echo makeLink($data['id'], $data['title'], 'series', $data['country'])?>" class="ui-ellipsis-2"><?php echo $data['title']?></a></h3>
+                <h3 class="ui-title"><a href="<?php echo makeLink($data['series']['id'], $data['series']['title'], 'series', $data['series']['country'])?>" class="ui-ellipsis-2"><?php echo $data['series']['title']?></a></h3>
               </div><!-- /.ui-meta -->
             </div><!-- /.item-video -->
           </div><!-- /.col-sm-3 -->

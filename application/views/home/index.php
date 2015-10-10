@@ -11,7 +11,7 @@
                 <div class="row">
                   <div class="ui-thumb big-ui-thumb col-sm-5">
                     <a href="<?php echo makeLink($newestVideo[0]['id'], $newestVideo[0]['title']) ?>">
-                      <img src="<?php echo getThumbnail($newestVideo[0]['series_thumbnail'], 'series') ?>" alt="<?php echo $newestVideo[0]['title'] ?> " class="img-responsive" />
+                      <img src="<?php echo getThumbnail($newestVideo[0]['series']['thumbnail'], 'series') ?>" alt="<?php echo $newestVideo[0]['title'] ?> " class="img-responsive" />
                       <span class="fa fa-play-circle-o"></span>
                     </a>
                   </div><!-- /.ui-thumb -->

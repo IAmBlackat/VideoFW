@@ -29,7 +29,6 @@ class Genre extends MY_Controller {
       if ($genre) {
         $offset = ($pageNum - 1)*ITEM_PER_PAGE_32;
         $seriesOfGenre = $this->Series_model->listSeriesByGenre($genre['id'], $offset, ITEM_PER_PAGE_32);
-
         $data['listObject'] = $seriesOfGenre;
         $total = $this->Series_model->getTotalSeriesByGenre($genre['id']);
 
@@ -39,11 +38,11 @@ class Genre extends MY_Controller {
 
         $data['genre'] = $genre;
         $this->layout->title("Series of genre ".$genre['name']);
+        $html = $this->layout->view('genre/' . $page, $data, true);
+        $this->setCacheHtml($cacheName, $html);
       } else {
         $this->layout->view('home/nodata', array());
       }
-      $html = $this->layout->view('genre/' . $page, $data, true);
-      $this->setCacheHtml($cacheName, $html);
     }
 
     if($html) echo $html;

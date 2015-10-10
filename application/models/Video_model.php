@@ -146,6 +146,34 @@ class Video_model extends CI_Model {
     }
     return $data;
   }
+  function getNewestVideo($totalItem=12, $videoType=VIDEO_TYPE_DRAMA){
+
+    $sql = "SELECT series.* FROM series "
+      . "INNER JOIN video "
+      . "ON video.series_id=series.id WHERE series.status=".STATUS_SHOW. " AND series.type=".$videoType." GROUP BY series_id ORDER BY video.publish_date DESC LIMIT 0,$totalItem";
+
+    $query = $this->db->query($sql);
+    $datas = $query->result_array();
+    $videoDatas = array();
+    if($datas){
+      $seriesData = array();
+      $strQueryVideo = '';
+      foreach($datas as $key => $data){
+        $seriesData[$data['id']] = $data;
+        $strQueryVideo .= " (SELECT * FROM video WHERE series_id={$data['id']} ORDER BY episode DESC LIMIT 1) ";
+        if($key<count($datas)-1){
+          $strQueryVideo .= "UNION ";
+        }
+      }
+      $videoDatas = $this->db->query($strQueryVideo)->result_array();
+      if($videoDatas){
+        foreach($videoDatas as $k => $videoData){
+          $videoDatas[$k]['series'] = $seriesData[$videoData['series_id']];
+        }
+      }
+    }
+    return $videoDatas;
+  }
   function getByTitle($title){
     $title = strtolower($title);
     $data = array();

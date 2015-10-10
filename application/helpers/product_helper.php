@@ -537,3 +537,8 @@ function getCharFromUri($uri) {
   $char = str_replace('char-star-', '', $uri);
   return $char;
 }
+function _debug($data){
+  if(isset($_GET['debug']) && $_GET['debug']=='true'){
+    echo $data;
+  }
+}

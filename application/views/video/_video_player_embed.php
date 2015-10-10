@@ -32,7 +32,7 @@
     file: '<?php echo $theme_path ?>images/watermark.png',
     xpos: 100,
     ypos: 0,
-    opacity: 0.8,
+    //opacity: 0.8,
     className: 'vjs-watermark'
   });
 
