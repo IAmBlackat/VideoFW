@@ -10,7 +10,8 @@ class Editor_Box_Item_model extends CI_Model {
     'box_id',
     'item_text',
     'item_link',
-    'item_thumbnail'
+    'item_thumbnail',
+    'order',
   );
 
   function __construct() {

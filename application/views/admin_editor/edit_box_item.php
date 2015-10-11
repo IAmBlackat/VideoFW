@@ -18,6 +18,10 @@
           <td><input type="text" name="item_link" style="width: 55%" value="<?php echo empty($item_link) ? '' : $item_link ?>"/></td>
         </tr>
         <tr>
+          <td>Order</td>
+          <td><input type="text" name="order"  value="<?php echo empty($order) ? '' : $order ?>"/></td>
+        </tr>
+        <tr>
           <td>
             <?php if($item_thumbnail):?>
               <img height ="100" src="<?php echo getThumbnail($item_thumbnail, 'editor') ?>">

@@ -32,7 +32,7 @@ class Editor_Box_model extends CI_Model {
     try {
       $sql = "SELECT e.*, et.id AS item_id, et.item_thumbnail, et.item_link, et.item_text
               FROM editor_box e LEFT JOIN editor_box_item et
-                ON e.id=et.box_id WHERE `key` = ?";
+                ON e.id=et.box_id WHERE `key` = ? ORDER BY et.order ASC";
       $query = $this->db->query($sql, array($key));
       $datas = $query->result_array();
       $items = array();

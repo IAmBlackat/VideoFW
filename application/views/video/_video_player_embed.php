@@ -64,7 +64,6 @@
           }
         });
         videoPlayer.on('playing', function() {
-          console.debug("playing");
           $('#_updating_streaming_msg').addClass("hidden");
           $.removeCookie(cookieName, { path: '/' });
           $.post(BASE_URL+"ajax/logs",{element_id: elementId, type: type, url_id: urlId, status: 1}, function( data ) {

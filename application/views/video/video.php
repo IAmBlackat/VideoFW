@@ -70,7 +70,7 @@ $videoLink = makeLink($video['id'], $video['title'], 'video');
           <?php else:?>
 
             <i>We lost few servers.Then, few episodes can't Watch. Please <a href="#" id="_reload_page"> reload the page </a> first. We fixing all episodes. Thanks and Enjoy!!</i>
-            <div id="logs_view" element_id="<?php echo $video['id']?>" data-type="video"></div>
+            <div id="logs_view" element_id="<?php echo $video['id']?>" data-type="video" data-update="notfound"></div>
           <?php endif;?>
 
           </div><!-- /.player -->

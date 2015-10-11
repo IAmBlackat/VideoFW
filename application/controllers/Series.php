@@ -69,7 +69,7 @@ class Series extends MY_Controller {
       $series = $this->Series_model->getById($seriesId);
       if ($series) {
         $offset = ($pageNum - 1)*ITEM_PER_PAGE_8;
-        $videosOfSeries = $this->Video_model->getRange("series_id=" . $seriesId, $offset, ITEM_PER_PAGE_8);
+        $videosOfSeries = $this->Video_model->getRange("series_id=" . $seriesId, $offset, ITEM_PER_PAGE_8, 'episode DESC');
         $data['videosOfSeries'] = $videosOfSeries;
         $total = $this->Video_model->getTotal("series_id=" . $seriesId);
 
