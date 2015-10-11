@@ -43,7 +43,7 @@ class Admin_editor extends MY_Controller {
 
     $whereClause = "1";
     $total = $this->Editor_Box_Item_model->getTotal($whereClause);
-    $listObject = $this->Editor_Box_Item_model->getRangeFull($whereClause, $offset, ITEM_PER_PAGE);
+    $listObject = $this->Editor_Box_Item_model->getRangeFull($whereClause, $offset, ITEM_PER_PAGE, '`order` DESC');
     $uri = "admin_editor/list_box_item";
     $data['listObject'] = $listObject;
     $data['total'] = $total;
