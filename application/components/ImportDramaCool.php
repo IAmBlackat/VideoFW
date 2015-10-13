@@ -70,12 +70,22 @@ class ImportDramaCool {
     return $ret;
   }
   public function importFromVideoUrl($url, $extraData = array()) {
-    echo "importFromVideoUrl: " . $url . "\n";
+    $command = isset($extraData['command']) ? $extraData['command'] : '';
     $type = isset($extraData['type']) ? $extraData['type'] : VIDEO_TYPE_DRAMA;
     $videoId = 0;
     $ret = array();
     $ret['id'] = 0;
-    $videoData = $this->getVideoData($url);
+    $videoData = $this->getVideoData($url, $command);
+    echo "\n";
+    if($command=='update_sub'){
+      if($videoData['has_sub']==1){
+        echo "update sub: " . $url . "\n";
+      }else{
+        echo "raw \n";
+        return false;
+      }
+    }
+    echo "importFromVideoUrl: " . $url . "\n";
     if ($videoData) {
       //series
       $seriesTitle = $videoData['series_title'];
@@ -84,13 +94,9 @@ class ImportDramaCool {
       if ($dbSeries) {
         $seriesId = $dbSeries['id'];
         $updateSeriesData = array();
-        //$updateSeriesData['type'] = $type;
         if(empty($dbSeries['is_complete'])){
           $tmpSeriesData = $this->getSeriesData($seriesLink);
-          if(empty($dbSeries['is_complete'])){
-            $updateSeriesData['is_complete'] = $tmpSeriesData['is_complete'];
-
-          }
+          $updateSeriesData['is_complete'] = $tmpSeriesData['is_complete'];
           $this->Series_model->update($seriesId, $updateSeriesData);
         }
 
@@ -98,7 +104,7 @@ class ImportDramaCool {
         $seriesData = $this->getSeriesData($seriesLink);
         $seriesThumbnail = saveImageFromSite($seriesData['thumbnail'], SERIE_IMAGE_THUMBNAIL_PATH);
         $seriesData['thumbnail'] = $seriesThumbnail;
-        $seriesData['status'] = STATUS_WAIT_FOR_APPROVE;
+        $seriesData['status'] = STATUS_SHOW;
         $seriesData['type'] = $type;
         $seriesId = $this->Series_model->insert($seriesData);
         if ($seriesData['genre']) {
@@ -110,7 +116,6 @@ class ImportDramaCool {
           }
         }
       }
-
       //end series
       //video
       $videoData['series_id'] = $seriesId;
@@ -120,22 +125,25 @@ class ImportDramaCool {
         $videoId = $this->Video_model->insert($videoData);
       } else {
         $videoId = $videoByOriginalUrl['id'];
+        if($command=='update_sub'){
+          $videoByOriginalUrl['has_sub'] = $videoData['has_sub'];
+          $this->Video_model->update($videoId, $videoByOriginalUrl);
+        }
       }
-
       $this->Video_Url_model->deleteByVideoId($videoId);
       //hd 720
       if ($videoData['hdIframe']) {//get
-        $iframePlayerLink = str_replace('http://www.dramacool.com/embeddramanox.php?id=','',$videoData['hdIframe']);
-        $streamingUrl = $iframePlayerLink;//$this->getVideoSourceFromIframe($iframePlayerLink, 'hd');
+        $streamingUrl = $this->getVideoSourceFromIframe($videoData['hdIframe'], 'hd');
         $this->_insertStreamingUrl($videoId, $streamingUrl, SERVER_TYPE_HD, VIDEO_TYPE_720, '');
       }
       $streamingUrl = '';
       $hasIframe = false;
       //360
       if ($videoData['standardIframe']) {//default => Google
-        $iframePlayerLink = str_replace('http://www.dramacool.com/embeddramanox.php?id=','',$videoData['standardIframe']);
-        $streamingUrl = $iframePlayerLink;//$this->getVideoSourceFromIframe($iframePlayerLink, 'standard');
-        $this->_insertStreamingUrl($videoId, $streamingUrl, SERVER_TYPE_STANDARD, VIDEO_TYPE_360, '');
+        $streamingUrl = $this->getVideoSourceFromIframe($videoData['standardIframe'], 'standard');
+        if($streamingUrl){
+          $this->_insertStreamingUrl($videoId, $streamingUrl, SERVER_TYPE_STANDARD, VIDEO_TYPE_360, '');
+        }
       }
       if ($videoData['coolIframe']) {//iframe
         $iframePlayerLink = $videoData['coolIframe'];
@@ -176,8 +184,7 @@ class ImportDramaCool {
     $videoData = $this->getVideoData($url);
     //hd 720
     if ($videoData['hdIframe']) {//get
-      $iframePlayerLink = str_replace('http://www.dramacool.com/embeddramanox.php?id=','',$videoData['hdIframe']);
-      $streamingUrl = $iframePlayerLink;//$this->getVideoSourceFromIframe($iframePlayerLink, 'hd');
+      $streamingUrl = $this->getVideoSourceFromIframe($videoData['hdIframe'], 'hd');
       if(isset($videoUrlArr[SERVER_TYPE_HD])){
         $tmpData = $videoUrlArr[SERVER_TYPE_HD];
         $this->_updateStreamingUrl($tmpData['id'], $videoId, $streamingUrl, SERVER_TYPE_HD, VIDEO_TYPE_720, '');
@@ -191,17 +198,24 @@ class ImportDramaCool {
     $hasIframe = false;
     //360
     if ($videoData['standardIframe']) {//default => Google
-      $iframePlayerLink = str_replace('http://www.dramacool.com/embeddramanox.php?id=','',$videoData['standardIframe']);
-      $streamingUrl = $iframePlayerLink;//$this->getVideoSourceFromIframe($iframePlayerLink, 'standard');
+      $streamingUrl = $this->getVideoSourceFromIframe($videoData['standardIframe'], 'standard');
       if(isset($videoUrlArr[SERVER_TYPE_STANDARD])){
         $tmpData = $videoUrlArr[SERVER_TYPE_STANDARD];
-        $this->_updateStreamingUrl($tmpData['id'], $videoId, $streamingUrl, SERVER_TYPE_STANDARD, VIDEO_TYPE_360, '');
-        $ret[$tmpData['id']] = $streamingUrl;
+        if($streamingUrl){
+          $this->_updateStreamingUrl($tmpData['id'], $videoId, $streamingUrl, SERVER_TYPE_STANDARD, VIDEO_TYPE_360, '');
+          $ret[$tmpData['id']] = $streamingUrl;
+        }else{
+          //$this->Video_Url_model->delete($tmpData['id']);
+        }
       }else{
-        $sId = $this->_insertStreamingUrl($videoId, $streamingUrl, SERVER_TYPE_STANDARD, VIDEO_TYPE_360, '');
-        $ret[$sId] = $streamingUrl;
+        if($streamingUrl) {
+          $sId = $this->_insertStreamingUrl($videoId, $streamingUrl, SERVER_TYPE_STANDARD, VIDEO_TYPE_360, '');
+          $ret[$sId] = $streamingUrl;
+        }
       }
-
+    }elseif(isset($videoUrlArr[SERVER_TYPE_STANDARD])){
+      $tmpData = $videoUrlArr[SERVER_TYPE_STANDARD];
+      //$this->Video_Url_model->delete($tmpData['id']);
     }
     if ($videoData['coolIframe']) {//iframe
       $iframePlayerLink = $videoData['coolIframe'];
@@ -243,22 +257,19 @@ class ImportDramaCool {
     $this->Video_Url_model->deleteByVideoId($videoId);
     //hd 720
     if ($videoData['hdIframe']) {//get
-      $iframePlayerLink = str_replace('http://www.dramacool.com/embeddramanox.php?id=','',$videoData['hdIframe']);
-      $streamingUrl = $iframePlayerLink;//$this->getVideoSourceFromIframe($iframePlayerLink, 'hd');
+      $streamingUrl = $this->getVideoSourceFromIframe($videoData['hdIframe'], 'hd');
       $this->_insertStreamingUrl($videoId, $streamingUrl, SERVER_TYPE_HD, VIDEO_TYPE_720, '');
     }
     $streamingUrl = '';
     $hasIframe = false;
     //360
     if ($videoData['standardIframe']) {//default => Google
-      $iframePlayerLink = str_replace('http://www.dramacool.com/embeddramanox.php?id=','',$videoData['standardIframe']);
-      $streamingUrl = $iframePlayerLink;//$this->getVideoSourceFromIframe($iframePlayerLink, 'standard');
+      $streamingUrl = $this->getVideoSourceFromIframe($videoData['standardIframe'], 'standard');
       $this->_insertStreamingUrl($videoId, $streamingUrl, SERVER_TYPE_STANDARD, VIDEO_TYPE_360, '');
     }
     if ($videoData['coolIframe']) {//iframe
-      $iframePlayerLink = $videoData['coolIframe'];
-      $streamingUrl = $this->getVideoSourceFromIframe($iframePlayerLink, 'cool');
-      if($iframePlayerLink){
+      $streamingUrl = $this->getVideoSourceFromIframe($videoData['coolIframe'], 'cool');
+      if($videoData['coolIframe']){
         $hasIframe = TRUE;
       }
       $this->_insertStreamingUrl($videoId, $streamingUrl, SERVER_TYPE_COOL, VIDEO_TYPE_360, $iframePlayerLink);
@@ -328,8 +339,9 @@ class ImportDramaCool {
       }
     }
   }
-  public function getVideoData($url) {
+  public function getVideoData($url, $command='') {
     $videoData = array();
+    $videoData['original_url'] = $url;
     $contentUrl = getFileContent($url);
     $htmlAll = str_get_html($contentUrl);
     if ($htmlAll) {
@@ -342,7 +354,6 @@ class ImportDramaCool {
       $title = trimtext($htmlAll->find('h1.title', 0)->plaintext);
       $episodeBlocks = $htmlAll->find('div.view-detail', 0)->find('div.row-9dr');
       $videoData['title'] = $title;
-      $videoData['original_url'] = $url;
       if ($episodeBlocks) {
         foreach ($episodeBlocks as $epBlock) {
           $tmpTitle = trimtext($epBlock->find('div.title_s_az', 0)->plaintext);
@@ -359,7 +370,6 @@ class ImportDramaCool {
           }
         }
       }
-
       $htmlObject1 = $htmlAll->find('div.desc-detail-ep-film', 0);
       $hdServer = $htmlObject1->find('div#serverHD', 0);
       $mobileServer = $htmlObject1->find('div#servermobile', 0);
@@ -398,8 +408,6 @@ class ImportDramaCool {
         $playerLink = $server1IframeObj->find('iframe', 0)->src;
         $videoData['server1Iframe'] = $playerLink;
       }
-
-
     }
     return $videoData;
   }
@@ -407,31 +415,48 @@ class ImportDramaCool {
   //server = (hd, cool, standard, mp4)
   public function getVideoSourceFromIframe($iframePlayerLink, $server = 'hd') {
     $strSources = '';
-    $playerSource = getFileContent($iframePlayerLink);
-    $htmlAll = str_get_html($playerSource);
     switch ($server) {
       case 'hd':
-        $strSources = $htmlAll->find('source', 0)->src;
-        break;
-      case 'cool':
-        $strSources = getStringBetween($playerSource, "file: '", "',", false);
+        $strSources = str_replace('http://www.dramacool.com/embeddramanox.php?id=','',$iframePlayerLink);
+        //$strSources = $htmlAll->find('source', 0)->src;
         break;
       case 'standard'://mobile
       case 'mobile':
-        $strSources = $htmlAll->find('source', 0)->src;
+        if(strpos($iframePlayerLink, 'embeddramanox')){
+          $strSources = str_replace('http://www.dramacool.com/embeddramanox.php?id=','',$iframePlayerLink);
+          $strSources = base64_encode($strSources);
+        }elseif(strpos($iframePlayerLink, 'videoupload.us')){
+          /*
+          $playerSource = getFileContent($iframePlayerLink);
+          $strSources = getStringBetween($playerSource, "file: '", "',", false);
+          if($strSources){
+            $strSources = base64_encode($strSources);
+          }*/
+          $strSources = '';
+        }
+        break;
+      case 'cool':
+        //$strSources = getStringBetween($playerSource, "file: '", "',", false);
+        //$strSources = base64_encode($strSources);
+        $strSources = '';
         break;
       case 'mp4':
-        $strSources = getStringBetween($playerSource, "clip:", "?start=0", false);
+        /*$strSources = getStringBetween($playerSource, "clip:", "?start=0", false);
         $strSources = preg_replace('/\s+/', '', $strSources);
         $strSources = str_replace("{url:'", '', $strSources);
+        $strSources = base64_encode($strSources);
+        */
+        $strSources = '';
         break;
       case 'server1':
-        $strSources = getStringBetween($playerSource, "file: '", "',", false);
+        //$strSources = getStringBetween($playerSource, "file: '", "',", false);
+        //$strSources = base64_encode($strSources);
+        $strSources = '';
         break;
       default:
         break;
     }
-    return base64_encode($strSources);
+    return $strSources;
   }
 
   public function getSeriesData($url) {

@@ -42,6 +42,24 @@ class Import_Data extends MY_Controller {
     $this->dramaCool->importHomePage($movieLink, array('type'=>VIDEO_TYPE_MOVIE, 'status' => 1, 'page' => 1));
     $this->dramaCool->importHomePage($kshowLink, array('type'=>VIDEO_TYPE_SHOW, 'status' => 1, 'page' => 1));
   }
+  #/Applications/XAMPP/xamppfiles/bin/php-5.5.15 /Datas/Sources/VideoFW/index.php import_data console_update_video_raw
+  public function console_update_video_raw(){
+    echo "console_update_video_raw:\n";
+    $time1 = time();
+    $whereClause = " has_sub=0 AND id > 28000";
+    $videoList = $this->Video_model->getRange($whereClause, 0, 10000, 'id ASC');
+    if($videoList){
+      foreach($videoList as $video){
+        echo $video['id'];
+        $originalUrl = $video['original_url'];
+        $this->dramaCool->importFromVideoUrl( $originalUrl, array( 'command' => 'update_sub'));
+        //$this->dramaCool->importFromVideoUrl( $originalUrl);
+      }
+    }
+    $time2 = time();
+    echo "console_update_video_raw: ".($time2 - $time1)."\n";
+    die("exit");
+  }
   #/Applications/XAMPP/xamppfiles/bin/php-5.5.15 /Datas/Sources/VideoFW/index.php import_data console_update_video_streaming
   public function console_update_video_streaming(){
     echo "console_update_video_streaming:\n";
