@@ -49,10 +49,11 @@ class Video extends MY_Controller {
   public function embed(){
     $urlId = intval($this->uri->segment(2));
     $videoId = intval($this->uri->segment(3));
-    $base64StreamingUrl = $this->uri->segment(4);
+    $hasSub = intval($this->uri->segment(4));
+    $base64StreamingUrl = $this->uri->segment(5);
     $base64StreamingUrl = rawurldecode($base64StreamingUrl);
     $theme_path = base_url().'themes/frontend/';
-    $data = $this->load->view('video/_video_player_embed', array('data'=> $base64StreamingUrl, 'theme_path' => $theme_path, 'video_id' => $videoId, 'url_id' => $urlId), TRUE);
+    $data = $this->load->view('video/_video_player_embed', array('data'=> $base64StreamingUrl, 'theme_path' => $theme_path, 'video_id' => $videoId, 'url_id' => $urlId, 'has_sub' => $hasSub), TRUE);
     echo $data; die();
   }
 }

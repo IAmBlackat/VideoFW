@@ -49,7 +49,8 @@ var Video = {
       var type = element.attr("data-type");
       var updateType = element.attr("data-update");
       //var cookieName = "_refresh_"+elementId;
-      $.post(BASE_URL+"ajax/logs",{element_id: elementId, type: type, status: 0}, function( data ) {
+      var hasSub = $('#_has_sub').val();
+      $.post(BASE_URL+"ajax/logs",{element_id: elementId, type: type, status: 0, has_sub: hasSub}, function( data ) {
         var jData = JSON.parse(data);
         if(jData.msg == 'updated'){
           if(jData.urlId==0 && updateType && updateType!='gg'){

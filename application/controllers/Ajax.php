@@ -72,6 +72,7 @@ class ajax extends MY_Controller {
     $type = isset($_POST['type']) ? intval($_POST['type']) : 'video';
     $urlId = isset($_POST['url_id']) ? intval($_POST['url_id']) : 0;
     $status = isset($_POST['status']) ? intval($_POST['status']) : 0;
+    $hasSub = isset($_POST['has_sub']) ? intval($_POST['has_sub']) : 0;
     if($status==0){
       $ret['urlId'] = $urlId;
       $this->load->library('simple_html_dom');
@@ -79,7 +80,7 @@ class ajax extends MY_Controller {
       $dramaCool = new ImportDramaCool();
       $videoObj = $this->Video_model->getById($elementId);
       if($videoObj){
-        $updateResult = $dramaCool->updateStreamingInLog($videoObj['id'], $videoObj['original_url']);
+        $updateResult = $dramaCool->updateStreamingInLog($videoObj['id'], $videoObj['original_url'], $hasSub);
         if($updateResult){
           $ret['msg'] = 'updated';
           if(isset($updateResult[$urlId])){

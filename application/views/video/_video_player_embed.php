@@ -48,7 +48,8 @@
         videoPlayer.on('error', function() {
           if(cookieValue==null){
             $('#_updating_streaming_msg').removeClass("hidden");
-            $.post(BASE_URL+"ajax/logs",{element_id: elementId, url_id: urlId, type: type, status: 0}, function( data ) {
+            var hasSub = $('#_has_sub').val();
+            $.post(BASE_URL+"ajax/logs",{element_id: elementId, url_id: urlId, type: type, has_sub: hasSub, status: 0}, function( data ) {
               var jData = JSON.parse(data);
               if(jData.msg == 'updated'){
                 var surl = atob(jData.surl);
@@ -78,4 +79,5 @@
 </script>
 
 <div id="logs_view" element_id="<?php echo $video_id?>" data-type="video"></div>
+<input type="hidden" id="_has_sub" value="<?php echo $has_sub?>" />
 

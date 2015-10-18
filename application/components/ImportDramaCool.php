@@ -125,7 +125,7 @@ class ImportDramaCool {
         $videoId = $this->Video_model->insert($videoData);
       } else {
         $videoId = $videoByOriginalUrl['id'];
-        if($command=='update_sub'){
+        if($videoData['has_sub']){
           $videoByOriginalUrl['has_sub'] = $videoData['has_sub'];
           $this->Video_model->update($videoId, $videoByOriginalUrl);
         }
@@ -139,18 +139,20 @@ class ImportDramaCool {
       $streamingUrl = '';
       $hasIframe = false;
       //360
-      if ($videoData['standardIframe']) {//default => Google
-        $streamingUrl = $this->getVideoSourceFromIframe($videoData['standardIframe'], 'standard');
-        if($streamingUrl){
-          $this->_insertStreamingUrl($videoId, $streamingUrl, SERVER_TYPE_STANDARD, VIDEO_TYPE_360, '');
-        }
-      }
-      if ($videoData['coolIframe']) {//iframe
+      if ($videoData['standardIframe']) {//default => Iframe
         $iframePlayerLink = $videoData['coolIframe'];
         if($iframePlayerLink){
           $hasIframe = TRUE;
         }
-        $streamingUrl = $this->getVideoSourceFromIframe($iframePlayerLink, 'cool');
+        $streamingUrl = $this->getVideoSourceFromIframe($iframePlayerLink, 'standard');
+        $this->_insertStreamingUrl($videoId, $streamingUrl, SERVER_TYPE_STANDARD, VIDEO_TYPE_360, $iframePlayerLink);
+      }
+      if ($videoData['coolIframe']) {//GG
+        $iframePlayerLink = $videoData['coolIframe'];
+        if($iframePlayerLink){
+          $hasIframe = TRUE;
+        }
+        $streamingUrl = $videoData['coolStreamingUrl'];//$this->getVideoSourceFromIframe($iframePlayerLink, 'cool');
         $this->_insertStreamingUrl($videoId, $streamingUrl, SERVER_TYPE_COOL, VIDEO_TYPE_360, $iframePlayerLink);
       }
       if ($videoData['mp4Iframe']) {//iframe
@@ -178,10 +180,14 @@ class ImportDramaCool {
     $ret['id'] = $videoId;
     return $ret;
   }
-  public function updateStreamingInLog($videoId, $url) {
+  public function updateStreamingInLog($videoId, $url, $hasSub=0) {
     $ret = array();
     $videoUrlArr = $this->Video_Url_model->getAllVideoUrlByVideoId($videoId);
     $videoData = $this->getVideoData($url);
+    if($hasSub==0 && $videoData['has_sub']==1){
+      $updateData = array('has_sub' => 1);
+      $this->Video_model->update($videoId, $updateData);
+    }
     //hd 720
     if ($videoData['hdIframe']) {//get
       $streamingUrl = $this->getVideoSourceFromIframe($videoData['hdIframe'], 'hd');
@@ -202,14 +208,14 @@ class ImportDramaCool {
       if(isset($videoUrlArr[SERVER_TYPE_STANDARD])){
         $tmpData = $videoUrlArr[SERVER_TYPE_STANDARD];
         if($streamingUrl){
-          $this->_updateStreamingUrl($tmpData['id'], $videoId, $streamingUrl, SERVER_TYPE_STANDARD, VIDEO_TYPE_360, '');
+          $this->_updateStreamingUrl($tmpData['id'], $videoId, $streamingUrl, SERVER_TYPE_STANDARD, VIDEO_TYPE_360, $videoData['standardIframe']);
           $ret[$tmpData['id']] = $streamingUrl;
         }else{
           //$this->Video_Url_model->delete($tmpData['id']);
         }
       }else{
         if($streamingUrl) {
-          $sId = $this->_insertStreamingUrl($videoId, $streamingUrl, SERVER_TYPE_STANDARD, VIDEO_TYPE_360, '');
+          $sId = $this->_insertStreamingUrl($videoId, $streamingUrl, SERVER_TYPE_STANDARD, VIDEO_TYPE_360, $videoData['standardIframe']);
           $ret[$sId] = $streamingUrl;
         }
       }
@@ -219,10 +225,10 @@ class ImportDramaCool {
     }
     if ($videoData['coolIframe']) {//iframe
       $iframePlayerLink = $videoData['coolIframe'];
-      $streamingUrl = $this->getVideoSourceFromIframe($iframePlayerLink, 'cool');
+      $streamingUrl = $videoData['coolStreamingUrl'];//$this->getVideoSourceFromIframe($iframePlayerLink, 'cool');
       if(isset($videoUrlArr[SERVER_TYPE_COOL])){
         $tmpData = $videoUrlArr[SERVER_TYPE_COOL];
-        $this->_updateStreamingUrl($tmpData['id'], $videoId, $streamingUrl, SERVER_TYPE_COOL, VIDEO_TYPE_360, '');
+        $this->_updateStreamingUrl($tmpData['id'], $videoId, $streamingUrl, SERVER_TYPE_COOL, VIDEO_TYPE_360, $iframePlayerLink);
       }else{
         $this->_insertStreamingUrl($videoId, $streamingUrl, SERVER_TYPE_COOL, VIDEO_TYPE_360, $iframePlayerLink);
       }
@@ -249,11 +255,13 @@ class ImportDramaCool {
     }
     return $ret;
   }
-  public function updateStreaming($videoId, $url, $isConsole = true) {
-    if($isConsole){
-      echo "updateStreaming: ".$videoId. ": " . $url . "\n";
-    }
+  public function updateStreaming($videoId, $url, $hasSub = true) {
+    echo "updateStreaming: ".$videoId. ": " . $url . "\n";
     $videoData = $this->getVideoData($url);
+    if($hasSub==0 && $videoData['has_sub']==1){
+      $updateData = array('has_sub' => 1);
+      $this->Video_model->update($videoId, $updateData);
+    }
     $this->Video_Url_model->deleteByVideoId($videoId);
     //hd 720
     if ($videoData['hdIframe']) {//get
@@ -263,15 +271,20 @@ class ImportDramaCool {
     $streamingUrl = '';
     $hasIframe = false;
     //360
-    if ($videoData['standardIframe']) {//default => Google
-      $streamingUrl = $this->getVideoSourceFromIframe($videoData['standardIframe'], 'standard');
-      $this->_insertStreamingUrl($videoId, $streamingUrl, SERVER_TYPE_STANDARD, VIDEO_TYPE_360, '');
-    }
-    if ($videoData['coolIframe']) {//iframe
-      $streamingUrl = $this->getVideoSourceFromIframe($videoData['coolIframe'], 'cool');
-      if($videoData['coolIframe']){
+    if ($videoData['standardIframe']) {//default => Iframe
+      $iframePlayerLink = $videoData['coolIframe'];
+      if($iframePlayerLink){
         $hasIframe = TRUE;
       }
+      $streamingUrl = $this->getVideoSourceFromIframe($iframePlayerLink, 'standard');
+      $this->_insertStreamingUrl($videoId, $streamingUrl, SERVER_TYPE_STANDARD, VIDEO_TYPE_360, $iframePlayerLink);
+    }
+    if ($videoData['coolIframe']) {//GG
+      $iframePlayerLink = $videoData['coolIframe'];
+      if($iframePlayerLink){
+        $hasIframe = TRUE;
+      }
+      $streamingUrl = $videoData['coolStreamingUrl'];//$this->getVideoSourceFromIframe($iframePlayerLink, 'cool');
       $this->_insertStreamingUrl($videoId, $streamingUrl, SERVER_TYPE_COOL, VIDEO_TYPE_360, $iframePlayerLink);
     }
     if ($videoData['mp4Iframe']) {//iframe
@@ -291,9 +304,7 @@ class ImportDramaCool {
       $this->_insertStreamingUrl($videoId, $streamingUrl, SERVER_TYPE_SERVER1, VIDEO_TYPE_360, $iframePlayerLink);
     }
     if (!$streamingUrl && !$hasIframe) {
-      if($isConsole) {
-        echo "-------------No streaming file--------\n";
-      }
+      echo "-------------No streaming file--------\n";
     }
     return TRUE;
   }
@@ -387,27 +398,33 @@ class ImportDramaCool {
         $playerLink = $mobileServer->find('iframe', 0)->src;
         $videoData['standardIframe'] = $playerLink;
       }
-      if ($coolServer) {
-        $playerLink = $coolServer->find('iframe', 0)->src;
-        $videoData['coolIframe'] = $playerLink;
-      }
       preg_match_all('#<script(.*?)</script>#is', $contentUrl, $matches);
-      $iframeScript = $matches[0][11];
-      $mp4IframeString = getStringBetween($iframeScript, "<iframe", "</iframe>");
-      $mp4IframeObj = str_get_html($mp4IframeString);
-      if($mp4IframeObj){
-        $playerLink = $mp4IframeObj->find('iframe', 0)->src;
-        $videoData['mp4Iframe'] = $playerLink;
+      if ($coolServer) {
+        if($coolServer->find('iframe', 0)){
+          $playerLink = $coolServer->find('iframe', 0)->src;
+          $videoData['coolIframe'] = $playerLink;
+        }else{
+          $iframeScript = $matches[0][9];
+          $coolIframeString = getStringBetween($iframeScript, 'link: "', '"', false);
+          $videoData['coolIframe'] = $coolIframeString;
+          $coolStreamingUrl = getStringBetween($iframeScript, "{file: '", "',", false);
+          $videoData['coolStreamingUrl'] = base64_encode($coolStreamingUrl);
+        }
+
       }
 
+      $iframeScript = $matches[0][13];
+      $mp4IframeString = getStringBetween($iframeScript, "src='", "' ", false);
+      $videoData['mp4Iframe'] = $mp4IframeString;
+
       //server 1
-      $iframeScriptServer1 = $matches[0][9];
-      $server1IframeString = getStringBetween($iframeScriptServer1, "<iframe", "</iframe>");
-      $server1IframeObj = str_get_html($server1IframeString);
-      if($server1IframeObj){
-        $playerLink = $server1IframeObj->find('iframe', 0)->src;
-        $videoData['server1Iframe'] = $playerLink;
+      $iframeScriptServer1 = $matches[0][11];
+      $server1IframeString = getStringBetween($iframeScriptServer1, "src='", "' ", false);
+      if(empty($server1IframeString)){
+        $iframeScriptServer1 = $matches[0][10];
+        $server1IframeString = getStringBetween($iframeScriptServer1, "src='", "' ", false);
       }
+      $videoData['server1Iframe'] = $server1IframeString;
     }
     return $videoData;
   }
@@ -426,13 +443,11 @@ class ImportDramaCool {
           $strSources = str_replace('http://www.dramacool.com/embeddramanox.php?id=','',$iframePlayerLink);
           $strSources = base64_encode($strSources);
         }elseif(strpos($iframePlayerLink, 'videoupload.us')){
-          /*
           $playerSource = getFileContent($iframePlayerLink);
           $strSources = getStringBetween($playerSource, "file: '", "',", false);
           if($strSources){
             $strSources = base64_encode($strSources);
-          }*/
-          $strSources = '';
+          }
         }
         break;
       case 'cool':

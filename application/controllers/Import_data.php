@@ -46,7 +46,7 @@ class Import_Data extends MY_Controller {
   public function console_update_video_raw(){
     echo "console_update_video_raw:\n";
     $time1 = time();
-    $whereClause = " has_sub=0 AND id > 28000";
+    $whereClause = " has_sub=0 AND id=<10000 ";
     $videoList = $this->Video_model->getRange($whereClause, 0, 10000, 'id ASC');
     if($videoList){
       foreach($videoList as $video){
@@ -69,7 +69,7 @@ class Import_Data extends MY_Controller {
     if($videoList){
       foreach($videoList as $video){
         $originalUrl = $video['original_url'];
-        $this->dramaCool->updateStreaming($video['id'], $originalUrl);
+        $this->dramaCool->updateStreamingInLog($video['id'], $originalUrl, $video['has_sub']);
         $dataStatus = array();
         $dataStatus['import_status'] = 1;
         $this->Video_model->update($video['id'], $dataStatus);
