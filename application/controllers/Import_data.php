@@ -69,7 +69,7 @@ class Import_Data extends MY_Controller {
     if($videoList){
       foreach($videoList as $video){
         $originalUrl = $video['original_url'];
-        $this->dramaCool->updateStreamingInLog($video['id'], $originalUrl, $video['has_sub']);
+        $this->dramaCool->updateStreaming($video['id'], $originalUrl, $video['has_sub']);
         $dataStatus = array();
         $dataStatus['import_status'] = 1;
         $this->Video_model->update($video['id'], $dataStatus);
