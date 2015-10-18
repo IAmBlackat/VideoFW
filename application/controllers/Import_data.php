@@ -65,7 +65,7 @@ class Import_Data extends MY_Controller {
     echo "console_update_video_streaming:\n";
     $time1 = time();
     $whereClause = " import_status IS NULL OR import_status=0";
-    $videoList = $this->Video_model->getRange($whereClause, 0, 10000, 'id ASC');
+    $videoList = $this->Video_model->getRange($whereClause, 0, 5000, 'publish_date DESC');
     if($videoList){
       foreach($videoList as $video){
         $originalUrl = $video['original_url'];
