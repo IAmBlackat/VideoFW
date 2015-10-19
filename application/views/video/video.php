@@ -12,31 +12,35 @@ if($videoUrlArr){
     $i++;
     $serverType = isset($server_type[$urlData['server_type']]) ? $server_type[$urlData['server_type']] : SERVER_TYPE_STANDARD;
     $videoUrlArr[$urlId]['server_type'] = $serverType;
-
     if ($urlData['server_type'] == SERVER_TYPE_COOL || $urlData['server_type'] == SERVER_TYPE_HD || $urlData['server_type'] == SERVER_TYPE_STANDARD) {
       $hasGoogleServer = TRUE;
     }
     if($urlData['server_type'] == SERVER_TYPE_HD){
       $selectedServerData = $urlData;
-    }elseif($urlData['server_type'] == SERVER_TYPE_HD){
+    }elseif($urlData['server_type'] == SERVER_TYPE_COOL){
+      $selectedServerData = $urlData;
+    }elseif($urlData['server_type'] == SERVER_TYPE_STANDARD){
       $selectedServerData = $urlData;
     }
 
     $iframeSrc = '';
     if ($urlData['server_type'] == SERVER_TYPE_COOL || $urlData['server_type'] == SERVER_TYPE_HD || $urlData['server_type'] == SERVER_TYPE_STANDARD) {
-      $iframeSrc = base_url('embed').'/'.$urlData['id'] .'/'.$urlData['video_id'].'/'.intval($video['has_sub']). '/' . rawurlencode($urlData['streaming_url']);
+      if($urlData['streaming_url']) {
+        $iframeSrc = base_url('embed') . '/' . $urlData['id'] . '/' . $urlData['video_id'] . '/' . intval($video['has_sub']) . '/' . rawurlencode($urlData['streaming_url']);
+      }
     } else {
       $iframeSrc = $urlData['iframe_url'];
     }
     $videoUrlArr[$urlId]['iframe_src'] = $iframeSrc;
   }
-  if($selectedServerData['server_type'] == SERVER_TYPE_COOL || $selectedServerData['server_type'] == SERVER_TYPE_HD || $urlData['server_type'] == SERVER_TYPE_STANDARD){
-    $defaultIframe = base_url('embed').'/'.$selectedServerData['id'].'/'.$selectedServerData['video_id'].'/'.intval($video['has_sub']).'/'.rawurlencode($selectedServerData['streaming_url']);
+  if($selectedServerData['server_type'] == SERVER_TYPE_COOL || $selectedServerData['server_type'] == SERVER_TYPE_HD || $selectedServerData['server_type'] == SERVER_TYPE_STANDARD){
+    if($selectedServerData['streaming_url']){
+      $defaultIframe = base_url('embed').'/'.$selectedServerData['id'].'/'.$selectedServerData['video_id'].'/'.intval($video['has_sub']).'/'.rawurlencode($selectedServerData['streaming_url']);
+    }
   }else{
     $defaultIframe = $selectedServerData['iframe_url'];
   }
 }
-
 $videoLink = makeLink($video['id'], $video['title'], 'video');
 ?>
 
@@ -51,15 +55,19 @@ $videoLink = makeLink($video['id'], $video['title'], 'video');
               <ul>
                 <?php
                 foreach($videoUrlArr as $urlData):
+                  if($urlData['iframe_src']):
                 ?>
                 <li class="<?php if($urlData['id'] == $selectedServerData['id']) echo 'active'?>"><a class="_select_server <?php echo $urlData['server_type']['alias']?>" href="#" data-id="<?php echo $urlData['id']?>" data-iframe="<?php echo $urlData['iframe_src']?>"><?php echo $urlData['server_type']['name']?></a></li>
                 <?php
+                endif;
                 endforeach;
                 ?>
 
               </ul>
             </div><!-- /.ui-server -->
-            <iframe id="_video_player_iframe" allowfullscreen='true' webkitallowfullscreen='true' mozallowfullscreen='true' marginheight='0' marginwidth='0' scrolling='no' frameborder='0' width='854' height='520' src='<?php echo $defaultIframe?>' target='_blank'></iframe>
+            <?php if($defaultIframe):?>
+              <iframe id="_video_player_iframe" allowfullscreen='true' webkitallowfullscreen='true' mozallowfullscreen='true' marginheight='0' marginwidth='0' scrolling='no' frameborder='0' width='854' height='520' src='<?php echo $defaultIframe?>' target='_blank'></iframe>
+            <?php endif;?>
             <div class="ui-share">
               <span>Share with love</span>
               <ul>
