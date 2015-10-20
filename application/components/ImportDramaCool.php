@@ -317,7 +317,11 @@ class ImportDramaCool {
     if($iframeUrl){
       $videoUrlData['iframe_url'] = $iframeUrl;
     }
-    $id = $this->Video_Url_model->insert($videoUrlData);
+    $id = 0;
+    if($iframeUrl || $streamingUrl){
+      $id = $this->Video_Url_model->insert($videoUrlData);
+    }
+
     return $id;
   }
   private function _updateStreamingUrl($urlId, $videoId, $streamingUrl, $serverType, $formatType = VIDEO_TYPE_360, $iframeUrl=''){
@@ -329,7 +333,9 @@ class ImportDramaCool {
     if($iframeUrl){
       $videoUrlData['iframe_url'] = $iframeUrl;
     }
-    $this->Video_Url_model->update($urlId, $videoUrlData);
+    if($iframeUrl || $streamingUrl) {
+      $this->Video_Url_model->update($urlId, $videoUrlData);
+    }
   }
   public function importHomePage($url, $extraData = array()){
     $page = isset($extraData['page']) ? $extraData['page'] : 1;

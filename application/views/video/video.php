@@ -17,9 +17,11 @@ if($videoUrlArr){
     }
     if($urlData['server_type'] == SERVER_TYPE_HD){
       $selectedServerData = $urlData;
-    }elseif($urlData['server_type'] == SERVER_TYPE_COOL){
+    }elseif(empty($selectedServerData) && $urlData['server_type'] == SERVER_TYPE_COOL){
       $selectedServerData = $urlData;
-    }elseif($urlData['server_type'] == SERVER_TYPE_STANDARD){
+    }elseif(empty($selectedServerData) && $urlData['server_type'] == SERVER_TYPE_STANDARD){
+      $selectedServerData = $urlData;
+    }elseif(empty($selectedServerData)){
       $selectedServerData = $urlData;
     }
 
@@ -65,9 +67,7 @@ $videoLink = makeLink($video['id'], $video['title'], 'video');
 
               </ul>
             </div><!-- /.ui-server -->
-            <?php if($defaultIframe):?>
-              <iframe id="_video_player_iframe" allowfullscreen='true' webkitallowfullscreen='true' mozallowfullscreen='true' marginheight='0' marginwidth='0' scrolling='no' frameborder='0' width='854' height='520' src='<?php echo $defaultIframe?>' target='_blank'></iframe>
-            <?php endif;?>
+            <iframe id="_video_player_iframe" allowfullscreen='true' webkitallowfullscreen='true' mozallowfullscreen='true' marginheight='0' marginwidth='0' scrolling='no' frameborder='0' width='854' height='520' src='<?php echo $defaultIframe?>' target='_blank'></iframe>
             <div class="ui-share">
               <span>Share with love</span>
               <ul>
