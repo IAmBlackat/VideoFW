@@ -35,8 +35,8 @@ class Home extends MY_Controller {
 
     //video moi nhat
     //$newestVideo = $this->Video_model->getRangeFull('video.status='.STATUS_SHOW, 0, 1, 'video.publish_date DESC');
-    $newestVideo = $this->Video_model->getNewestVideo(1,VIDEO_TYPE_DRAMA);
-    $data['newestVideo'] = $newestVideo;
+    //$newestVideo = $this->Video_model->getNewestVideo(1,VIDEO_TYPE_DRAMA);
+    $data['newestVideo'] = array();//$newestVideo;
 
     $dramaList = $this->Video_model->getNewestVideo(12,VIDEO_TYPE_DRAMA);
     $viewData = array('datas' => $dramaList, 'title' => 'Recent Added Drama', 'link' => base_url().'drama-list.html');
